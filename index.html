@@ -2,7 +2,9 @@
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <title>THUNDRR GO · Creator Hub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,600;1,700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
@@ -31,7 +33,8 @@
 }
 html,body{height:100%}
 body{font-family:'Montserrat',sans-serif;color:var(--fg);background:var(--bg);
-  -webkit-font-smoothing:antialiased;line-height:1.5;overflow-x:hidden;transition:background .4s,color .4s}
+  -webkit-font-smoothing:antialiased;line-height:1.5;overflow-x:hidden;transition:background .4s,color .4s;
+  touch-action:pan-y;overscroll-behavior:none;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
 em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--p)}
 button{font-family:inherit;cursor:pointer}
 a{color:var(--p)}
@@ -92,6 +95,20 @@ label.fld{display:block;font-size:11px;font-weight:800;letter-spacing:.1em;text-
 .h-eyebrow{font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--p)}
 .h-title{font-size:clamp(26px,4.4vw,38px);font-weight:900;letter-spacing:-.03em;line-height:1.05;margin:4px 0 2px}
 .h-sub{color:var(--mu);font-size:14px;font-weight:600;margin-bottom:22px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:-10px 0 20px}
+.chip{font-size:12.5px;font-weight:800;padding:8px 16px;border-radius:100px;border:1px solid var(--br);background:var(--card);color:var(--mu);transition:all .18s}
+.chip:hover{border-color:var(--p);color:var(--p)}
+.chip.on{background:var(--p);color:#fff;border-color:var(--p);box-shadow:0 6px 14px var(--pb)}
+.examples{margin-top:10px;border-top:1px solid var(--br);padding-top:10px;display:none}
+.examples.open{display:block;animation:fade .25s ease both}
+.ex-row{display:flex;align-items:center;gap:10px;padding:7px 0}
+.ex-rank{width:18px;flex:0 0 18px;font-weight:900;font-size:12px;color:var(--mul);text-align:center}
+.ex-info{flex:1;min-width:0}
+.ex-title{font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ex-sub{font-size:10px;font-weight:700;color:var(--mu)}
+.ex-watch{flex:0 0 auto;font-size:11px;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--p),var(--pd));border-radius:8px;padding:5px 11px;text-decoration:none}
+.ex-btn{width:100%;margin-top:6px;font-size:11.5px;font-weight:800;color:var(--p);border:1px solid var(--br);background:var(--bg2);border-radius:9px;padding:8px}
+.ex-btn:hover{border-color:var(--p)}
 
 /* mini stats */
 .mini-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:22px}
@@ -271,16 +288,79 @@ label.fld{display:block;font-size:11px;font-weight:800;letter-spacing:.1em;text-
 .verdict.ok{color:var(--green);background:var(--green-bg)}.verdict.low{color:var(--red);background:var(--red-bg)}.verdict.mid{color:var(--gold);background:var(--gold-bg)}
 
 /* bottom nav (mobile) */
-.nav{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:120;display:none;gap:1px;
-  padding:5px;border-radius:100px;background:var(--glass);border:1px solid var(--br);box-shadow:var(--slg);
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);max-width:96vw}
-.navb{border:none;background:none;color:var(--mu);font-weight:800;font-size:11px;padding:8px 11px;border-radius:100px;display:flex;flex-direction:column;align-items:center;gap:2px;transition:color .2s,background .2s;white-space:nowrap}
-.navb.on{color:#fff;background:linear-gradient(135deg,var(--p),var(--pd));box-shadow:0 6px 16px var(--pb)}
-.navb .ni{font-size:15px}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:120;display:none;align-items:stretch;justify-content:space-around;gap:1px;
+  background:var(--glass);border-top:1px solid var(--br);box-shadow:0 -10px 30px rgba(120,70,20,.10);
+  backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);overflow-x:auto;
+  padding:7px 5px calc(7px + env(safe-area-inset-bottom));}
+[data-theme="dark"] .nav{box-shadow:0 -10px 30px rgba(0,0,0,.5)}
+.navb{flex:1 1 0;min-width:48px;border:none;background:none;color:var(--mu);font-weight:700;font-size:10px;
+  padding:6px 2px;border-radius:13px;display:flex;flex-direction:column;align-items:center;gap:2px;
+  transition:color .18s,background .18s;-webkit-tap-highlight-color:transparent}
+.navb .ni{font-size:17px;line-height:1}
+.navb.on{color:var(--p);background:var(--ps)}
+.navb:active{transform:scale(.94)}
+.whoami{font-size:11px;font-weight:800;color:var(--p);background:var(--ps);border:1px solid var(--pb);border-radius:100px;padding:4px 11px;text-transform:capitalize}
+
+/* admin directory */
+.adm-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+.adm-bar .inp{flex:1;min-width:200px}
+.adm-sort{display:flex;gap:6px}
+.adm-sort button{font-size:12px;font-weight:800;padding:8px 13px;border-radius:100px;border:1px solid var(--br);background:var(--card);color:var(--mu)}
+.adm-sort button.on{background:var(--p);color:#fff;border-color:var(--p)}
+.adm-wrap{background:var(--card);border:1px solid var(--br);border-radius:var(--r);box-shadow:var(--smd);overflow:hidden}
+.adm-table{width:100%;border-collapse:collapse;font-size:13px}
+.adm-table th{text-align:left;font-size:9.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--mul);padding:12px 14px;border-bottom:1.5px solid var(--br);position:sticky;top:0;background:var(--card);z-index:1}
+.adm-table td{padding:10px 14px;border-bottom:1px solid var(--br);font-weight:600;vertical-align:middle}
+.adm-table td.r,.adm-table th.r{text-align:right;font-variant-numeric:tabular-nums}
+.adm-table tr:last-child td{border-bottom:none}
+.adm-table tbody tr{cursor:pointer;transition:background .12s}
+.adm-table tbody tr:hover{background:var(--ps)}
+.adm-cre{display:flex;align-items:center;gap:10px;min-width:0}
+.adm-cre .av{width:34px;height:34px;border-radius:10px;flex:0 0 34px;font-size:13px}
+.adm-cre .nm{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:170px}
+.adm-cre .hd{font-size:11px;font-weight:600;color:var(--mu)}
+.adm-add{font-size:11px;font-weight:800;padding:6px 12px;border-radius:9px;border:1px solid var(--p);background:var(--p);color:#fff}
+.adm-add.in{background:var(--green-bg);color:var(--green);border-color:var(--green-br)}
+.adm-add:hover{filter:brightness(1.05)}
+.adm-lv{font-size:10px;font-weight:900;color:#fff;border-radius:6px;padding:2px 7px}
+.adm-foot{padding:12px 14px;font-size:12px;font-weight:700;color:var(--mu);text-align:center}
+@media(max-width:720px){.adm-table .hide-sm{display:none}.adm-cre .nm{max-width:120px}}
 .toast{position:fixed;bottom:88px;left:50%;transform:translateX(-50%) translateY(20px);z-index:400;
   background:var(--fg);color:var(--bg);font-weight:800;font-size:13px;padding:11px 20px;border-radius:100px;box-shadow:var(--slg);opacity:0;pointer-events:none;transition:.3s}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .hide{display:none!important}
+
+/* ---- motion: reveal + count-up + sheen ---- */
+@keyframes reveal{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.reveal{animation:reveal .58s cubic-bezier(.2,.75,.2,1) both}
+@keyframes pop{0%{transform:scale(.92);opacity:0}60%{transform:scale(1.02)}100%{transform:scale(1);opacity:1}}
+.num{display:inline-block;font-variant-numeric:tabular-nums}
+.counting{will-change:contents}
+@keyframes titleIn{from{opacity:0;letter-spacing:.08em;filter:blur(6px)}to{opacity:1;letter-spacing:-.03em;filter:none}}
+.h-title{animation:titleIn .6s ease both}
+@keyframes sheen{0%{background-position:200% 0}100%{background-position:-200% 0}}
+@media(prefers-reduced-motion:reduce){.reveal,.h-title{animation:none}}
+
+/* ---- map zoom + night city-lights ---- */
+.map-wrap{position:relative;background:var(--card);border:1px solid var(--br);border-radius:var(--r);box-shadow:var(--smd);padding:14px;overflow:hidden}
+[data-theme="dark"] .map-wrap{background:radial-gradient(ellipse 80% 70% at 50% 40%,#0d1426,#070a12 80%);border-color:#16213a}
+.usmap{width:100%;height:auto;display:block;touch-action:none;cursor:grab}
+.usmap.grabbing{cursor:grabbing}
+#mapZoom{transition:transform .08s linear}
+#mapZoom.snap{transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+[data-theme="dark"] .usmap path.st{fill:#0f1a30!important;stroke:#1d2c4a}
+[data-theme="dark"] .usmap path.st[data-has="1"]{stroke:#2a3f63}
+[data-theme="dark"] .usmap .cnt{fill:#cdd9f0;stroke:none}
+[data-theme="dark"] .usmap .pin{filter:drop-shadow(0 0 2px currentColor) drop-shadow(0 0 5px currentColor);animation:twinkle 3.2s ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.95}50%{opacity:.5}}
+@media(prefers-reduced-motion:reduce){[data-theme="dark"] .usmap .pin{animation:none}}
+.map-ctrls{position:absolute;top:24px;right:24px;z-index:5;display:flex;flex-direction:column;gap:6px}
+.map-ctrls button{width:34px;height:34px;border-radius:10px;border:1px solid var(--br);background:var(--glass);backdrop-filter:blur(10px);color:var(--fg);font-size:17px;font-weight:800;line-height:1;display:flex;align-items:center;justify-content:center;box-shadow:var(--ssm)}
+.map-ctrls button:hover{border-color:var(--p);color:var(--p)}
+.map-ctrls button:active{transform:scale(.92)}
+.night-toggle{position:absolute;top:24px;left:24px;z-index:5;display:flex;align-items:center;gap:7px;font-size:11px;font-weight:800;color:var(--mu);
+  background:var(--glass);backdrop-filter:blur(10px);border:1px solid var(--br);border-radius:100px;padding:6px 12px}
+.night-toggle:hover{border-color:var(--p);color:var(--p)}
 
 @media(max-width:880px){.dash-layout{grid-template-columns:1fr}}
 @media(max-width:720px){
@@ -336,6 +416,7 @@ label.fld{display:block;font-size:11px;font-weight:800;letter-spacing:.1em;text-
 @keyframes dcIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .dc-top{display:flex;gap:11px;align-items:center;margin-bottom:10px}
 .dc-top .av{width:40px;height:40px;border-radius:11px;flex:0 0 40px;font-size:15px}
+.lvpill{margin-left:auto;flex:0 0 auto;font-size:10px;font-weight:900;color:#fff;border-radius:7px;padding:3px 9px;letter-spacing:.03em}
 .dc-name{font-weight:900;font-size:14.5px;line-height:1.15}
 .dc-handle{font-size:11.5px;font-weight:600;color:var(--mu)}
 .dc-field{display:flex;align-items:center;gap:9px;padding:7px 0;border-top:1px solid var(--br)}
@@ -412,12 +493,14 @@ label.fld{display:block;font-size:11px;font-weight:800;letter-spacing:.1em;text-
       <div class="brand"><span class="dot"></span>THUNDRR <span class="go">GO</span></div>
       <div class="tb-actions">
         <span class="range" id="rangeTag"></span>
+        <span class="whoami" id="whoami" title="Signed in"></span>
         <button class="icbtn" id="themeBtn" title="Theme">🌙</button>
         <button class="icbtn" id="logoutBtn" title="Sign out">⏻</button>
       </div>
     </div>
     <div class="tabs">
       <button class="tab-btn active" data-v="dash">◧ Dashboard</button>
+      <button class="tab-btn" data-v="admin">⚇ Admin</button>
       <button class="tab-btn" data-v="roster">☷ Roster</button>
       <button class="tab-btn" data-v="coach">✦ Coaching</button>
       <button class="tab-btn" data-v="map">⌖ Map</button>
@@ -428,6 +511,8 @@ label.fld{display:block;font-size:11px;font-weight:800;letter-spacing:.1em;text-
   <div class="main">
     <!-- DASHBOARD -->
     <section class="view on" id="v-dash"></section>
+    <!-- ADMIN -->
+    <section class="view" id="v-admin"></section>
     <!-- ROSTER -->
     <section class="view" id="v-roster"></section>
     <!-- COACHING -->
@@ -443,6 +528,7 @@ label.fld{display:block;font-size:11px;font-weight:800;letter-spacing:.1em;text-
 
 <div class="nav" id="nav">
   <button class="navb on" data-v="dash"><span class="ni">◧</span>Dash</button>
+  <button class="navb" data-v="admin"><span class="ni">⚇</span>Admin</button>
   <button class="navb" data-v="roster"><span class="ni">☷</span>Roster</button>
   <button class="navb" data-v="coach"><span class="ni">✦</span>Coach</button>
   <button class="navb" data-v="map"><span class="ni">⌖</span>Map</button>
@@ -467,9 +553,10 @@ label.fld{display:block;font-size:11px;font-weight:800;letter-spacing:.1em;text-
 
 <script>
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-const LS={auth:'tgo_auth',theme:'tgo_theme',managed:'tgo_managed'};
-const CRED={u:'ben',p:'ben123'};
-let DB=null,MANAGED=new Set(),CUR='dash';
+const LS={theme:'tgo_theme'};
+const CREDS={ben:'ben123',andrew:'andrew55',teton:'teton99',jenn:'jenn11'};
+let DB=null,MANAGED=new Set(),CUR='dash',USER=null;
+const managedKey=()=>'tgo_managed_'+(USER||'guest');
 
 /* utils */
 const fmt=n=>{n=+n||0;const a=Math.abs(n);if(a>=1e6)return(n/1e6).toFixed(a>=1e7?0:1)+'M';if(a>=1e3)return(n/1e3).toFixed(a>=1e4?0:1)+'K';return Math.round(n).toString();};
@@ -481,9 +568,23 @@ const iso=s=>{s=String(s);return s.length===8?`${s.slice(0,4)}-${s.slice(4,6)}-$
 const fromIso=s=>String(s).replace(/-/g,'');
 const initials=s=>{s=(s||'?').replace(/[^A-Za-z0-9 ]/g,'').trim();return(s[0]||'?').toUpperCase();};
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const VALID=p=>p.views>=300&&p.dur>=15;
+const VALID=p=>p.views>=300;// public/reached proxy (300+ views)
 const median=a=>{if(!a.length)return 0;const s=[...a].sort((x,y)=>x-y);return s[Math.floor(s.length/2)];};
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),1800);}
+
+/* ---- motion helpers ---- */
+const REDUCE=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
+const NF={money:money,fmt:fmt,int:n=>Math.round(n).toLocaleString('en-US'),pct:n=>pct(n)};
+function numSpan(raw,type){const f=NF[type]||fmt;return `<span class="num" data-count="${raw}" data-fmt="${type}">${f(raw)}</span>`;}
+function animateNum(el){const to=+el.dataset.count;if(isNaN(to))return;const f=NF[el.dataset.fmt]||fmt;
+  if(REDUCE){el.textContent=f(to);return;}
+  const dur=850,t0=performance.now();el.classList.add('counting');
+  (function step(t){let p=Math.min(1,(t-t0)/dur);p=1-Math.pow(1-p,3);el.textContent=f(to*p);
+    if(p<1)requestAnimationFrame(step);else{el.textContent=f(to);el.classList.remove('counting');}})(t0);}
+function runCounters(root){(root||document).querySelectorAll('.num[data-count]').forEach(animateNum);}
+function reveal(root,sel,step){if(REDUCE)return;const els=(root||document).querySelectorAll(sel);
+  els.forEach((el,i)=>{el.style.animationDelay=(i*(step||55))+'ms';el.classList.remove('reveal');void el.offsetWidth;el.classList.add('reveal');});}
+function polish(root){runCounters(root);reveal(root,'.mini',55);reveal(root,'.progc',90);reveal(root,'.card',70);}
 
 /* theme */
 function setTheme(t){document.documentElement.dataset.theme=t;localStorage.setItem(LS.theme,t);$('#themeBtn').textContent=t==='dark'?'☀️':'🌙';}
@@ -491,15 +592,16 @@ setTheme(localStorage.getItem(LS.theme)||'light');
 $('#themeBtn').onclick=()=>setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark');
 
 /* auth */
-function showApp(){$('#login').style.display='none';$('#app').style.display='block';boot();}
+function showApp(){$('#login').style.display='none';$('#app').style.display='block';
+  $('#whoami')&&($('#whoami').textContent=USER);boot();}
 function tryLogin(){const u=$('#lu').value.trim().toLowerCase(),p=$('#lp').value;
-  if(u===CRED.u&&p===CRED.p){localStorage.setItem(LS.auth,'1');$('#loginErr').textContent='';showApp();}
+  if(CREDS[u]&&CREDS[u]===p){USER=u;localStorage.setItem('tgo_user',u);$('#loginErr').textContent='';showApp();}
   else{$('#loginErr').textContent='Wrong username or password.';$('#lp').value='';}}
 $('#loginBtn').onclick=tryLogin;
 $('#lp').addEventListener('keydown',e=>{if(e.key==='Enter')tryLogin();});
 $('#lu').addEventListener('keydown',e=>{if(e.key==='Enter')$('#lp').focus();});
-$('#logoutBtn').onclick=()=>{localStorage.removeItem(LS.auth);location.reload();};
-if(localStorage.getItem(LS.auth)==='1')showApp();
+$('#logoutBtn').onclick=()=>{localStorage.removeItem('tgo_user');location.reload();};
+(()=>{const u=localStorage.getItem('tgo_user');if(u&&CREDS[u]){USER=u;showApp();}})();
 
 /* nav */
 function go(v){CUR=v;$$('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.v===v));
@@ -513,13 +615,12 @@ async function boot(){
   try{const r=await fetch('./data.json',{cache:'no-store'});if(!r.ok)throw 0;DB=await r.json();}
   catch(e){$('.main').innerHTML='<div class="muted-note" style="padding-top:80px">Couldn\'t load <b>data.json</b>. Run <code>node build.js</code> or deploy to Netlify so the daily exports compile.</div>';return;}
   index();
-  const saved=localStorage.getItem(LS.managed);
-  if(saved)MANAGED=new Set(JSON.parse(saved));
-  else{const snap=latestSnap().byUser;let s=Object.keys(DB.roster||{}).filter(u=>snap[u]||(IDX.byUser[u]&&IDX.byUser[u].posts.length));if(!s.length)s=Object.keys(DB.roster||{});if(!s.length)s=Object.keys(snap);MANAGED=new Set(s);saveManaged();}
+  const saved=localStorage.getItem(managedKey());
+  MANAGED=saved?new Set(JSON.parse(saved)):new Set();
   $('#rangeTag').textContent=DB.dataRange.end?`data thru ${ymd(DB.dataRange.end)}`:'';
-  renderDash();renderRoster();renderCoach();renderMap();renderWebinars();
+  renderDash();renderAdmin();renderRoster();renderCoach();renderMap();renderWebinars();
 }
-const saveManaged=()=>localStorage.setItem(LS.managed,JSON.stringify([...MANAGED]));
+const saveManaged=()=>localStorage.setItem(managedKey(),JSON.stringify([...MANAGED]));
 const latestSnap=()=>DB.snapshots.at(-1)||{byUser:{}};
 const snapFor=u=>latestSnap().byUser[u]||null;
 function monthSnapGMV(u,mk){const s=DB.snapshots.find(s=>s.monthKey===mk);return s&&s.byUser[u]?s.byUser[u].sales:null;}
@@ -538,46 +639,64 @@ function rec(u){const prof=DB.profiles[u]||{},ro=DB.roster[u]||{},snap=snapFor(u
   return{u,name:ro.name||prof.name||u,prof,ro,snap,ux};}
 
 /* ---------------- DASHBOARD ---------------- */
+let DASH_SCOPE=null;
+const inScope=(date,scope)=>scope==='all'||date.slice(0,6)===scope;
+function industryFor(scope){const acc={valid:0,gmv:0,posts:0},ttd={valid:0,gmv:0,posts:0};let tv=0;
+  for(const p of DB.posts){if(!inScope(p.date,scope))continue;const v=VALID(p),A=p.ind==='ACC'||p.ind==='BOTH',T=p.ind==='TTD'||p.ind==='BOTH';
+    if(A){acc.gmv+=p.sales;acc.posts++;if(v)acc.valid++;}if(T){ttd.gmv+=p.sales;ttd.posts++;if(v)ttd.valid++;}if(v)tv++;}
+  acc.gmv=Math.round(acc.gmv*100)/100;ttd.gmv=Math.round(ttd.gmv*100)/100;return{acc,ttd,totalValid:tv};}
+function dailyFor(scope){const by={};for(const p of DB.posts){if(!inScope(p.date,scope))continue;
+    const d=by[p.date]=by[p.date]||{ag:0,tg:0,av:0,tv:0};const v=VALID(p),A=p.ind==='ACC'||p.ind==='BOTH',T=p.ind==='TTD'||p.ind==='BOTH';
+    if(A){d.ag+=p.sales;if(v)d.av++;}if(T){d.tg+=p.sales;if(v)d.tv++;}}
+  const dates=Object.keys(by).sort();let ag=0,tg=0,av=0,tv=0;const out=[];
+  for(const dt of dates){const x=by[dt];ag+=x.ag;tg+=x.tg;av+=x.av;tv+=x.tv;out.push({d:dt,ag:Math.round(ag*100)/100,tg:Math.round(tg*100)/100,av,tv});}return out;}
+function aggFor(list,scope){let V=0,P=0,active=0;list.forEach(u=>{const ux=IDX.byUser[u];if(!ux)return;let v=0,p=0;
+    if(scope==='all'){for(const m in ux.months){v+=ux.months[m].views;p+=ux.months[m].posts;}}else{const c=ux.months[scope];if(c){v=c.views;p=c.posts;}}
+    if(p>0)active++;V+=v;P+=p;});return{V,P,active};}
+function prevScope(scope){if(scope==='all')return null;const i=IDX.months.indexOf(scope);return i>0?IDX.months[i-1]:null;}
+function setScope(s){DASH_SCOPE=s;renderDash();}
+
 function renderDash(){
-  const list=[...MANAGED],ind=DB.industry||{acc:{valid:0,gmv:0},ttd:{valid:0,gmv:0},totalValid:0,monthKey:IDX.curMonth};
-  const daily=DB.daily||[],D=daily.at(-1)||{ag:0,tg:0,av:0,tv:0},Dp=daily.at(-2)||null;
-  const mk=ind.monthKey||IDX.curMonth;
-  // managed monthly aggregates (views/posts/active)
-  let cV=0,cP=0,pV=0,pP=0,active=0;
-  list.forEach(u=>{const ux=IDX.byUser[u];if(!ux)return;const c=ux.months[mk],pp=ux.months[IDX.prevMonth];
-    if(c){cV+=c.views;cP+=c.posts;active++;}if(pp){pV+=pp.views;pP+=pp.posts;}});
+  const list=Object.keys(latestSnap().byUser);
+  if(!DASH_SCOPE)DASH_SCOPE=IDX.curMonth||'all';
+  const scope=DASH_SCOPE,isCur=scope===IDX.curMonth,ps=prevScope(scope);
+  const ind=industryFor(scope),daily=dailyFor(scope),D=daily.at(-1)||{ag:0,tg:0,av:0,tv:0},Dp=daily.at(-2)||null;
+  const pind=ps?industryFor(ps):null;
+  const ag=aggFor(list,scope),pag=ps?aggFor(list,ps):{V:0,P:0};
   const del=(c,p)=>{if(p==null||!p)return{c:'flat',t:''};const d=(c-p)/p*100;return{c:d>0.5?'up':d<-0.5?'down':'flat',t:(d>0?'▲':d<0?'▼':'•')+Math.abs(d).toFixed(0)+'%'};};
-  const inc=(n,m)=>{if(!Dp||!n)return{c:'flat',t:''};return{c:n>0?'up':'down',t:(n>0?'▲ +':'▼ ')+(m?money(Math.abs(n)):fmt(Math.abs(n)))+' today'};};
+  const inc=(n,m)=>{if(!Dp||!n)return{c:'flat',t:''};return{c:n>0?'up':'down',t:(n>0?'▲ +':'▼ ')+(m?money(Math.abs(n)):fmt(Math.abs(n)))+(isCur?' today':'')};};
   const totGmv=ind.acc.gmv+ind.ttd.gmv;
-  const gmvInc=inc((D.ag+D.tg)-(Dp?Dp.ag+Dp.tg:0),true);
-  const valInc=inc((D.av+D.tv)-(Dp?Dp.av+Dp.tv:0),false);
+  const scopeLabel=scope==='all'?'All time':mLabel(scope);
+  const chips=[...IDX.months].reverse().map(m=>`<button class="chip ${scope===m?'on':''}" onclick="setScope('${m}')">${mLabel(m).split(' ')[0]}</button>`).join('')+`<button class="chip ${scope==='all'?'on':''}" onclick="setScope('all')">All time</button>`;
 
   $('#v-dash').innerHTML=`
    <div class="h-eyebrow">TikTok GO · Program</div>
    <h1 class="h-title">Program <em>dashboard</em></h1>
-   <div class="h-sub">${list.length} managed creators · ${active} active in ${mLabel(mk)} · figures as of ${ymd(ind.asOf||DB.dataRange.end)}</div>
+   <div class="h-sub">${list.length} creators in the program · ${ag.active} active · ${scope==='all'?'program to date':scopeLabel}${isCur?` · as of ${ymd(DB.dataRange.end)}`:''}</div>
+   <div class="chips">${chips}</div>
 
    <div class="mini-stats">
-     ${mini('Paid GMV',money(totGmv),gmvInc,'ACC + TTD · to date')}
-     ${mini('Valid posts',fmt(ind.totalValid),valInc,`${ind.acc.valid} ACC · ${ind.ttd.valid} TTD`)}
-     ${mini('Roster views',fmt(cV),del(cV,pV),mLabel(mk))}
-     ${mini('Posts',fmt(cP),del(cP,pP),mLabel(mk))}
+     ${mini('Paid GMV',totGmv,'money',pind?del(totGmv,pind.acc.gmv+pind.ttd.gmv):{c:'flat',t:''},'ACC + TTD')}
+     ${mini('Valid posts',ind.totalValid,'int',pind?del(ind.totalValid,pind.totalValid):{c:'flat',t:''},`${ind.acc.valid} ACC · ${ind.ttd.valid} TTD`)}
+     ${mini('Roster views',ag.V,'fmt',del(ag.V,pag.V),scopeLabel.split(' ')[0])}
+     ${mini('Posts',ag.P,'fmt',del(ag.P,pag.P),scopeLabel.split(' ')[0])}
    </div>
 
    <div class="prog">
-     ${progCard('acc','🏨','ACC · Accommodations',ind.acc.valid,ind.acc.gmv,inc(Dp?D.av-Dp.av:0,false),inc(Dp?D.ag-Dp.ag:0,true),mk)}
-     ${progCard('ttd','🎟️','TTD · Things to Do',ind.ttd.valid,ind.ttd.gmv,inc(Dp?D.tv-Dp.tv:0,false),inc(Dp?D.tg-Dp.tg:0,true),mk)}
+     ${progCard('acc','🏨','ACC · Accommodations',ind.acc.valid,ind.acc.gmv,inc(Dp?D.av-Dp.av:0,false),inc(Dp?D.ag-Dp.ag:0,true),scopeLabel)}
+     ${progCard('ttd','🎟️','TTD · Things to Do',ind.ttd.valid,ind.ttd.gmv,inc(Dp?D.tv-Dp.tv:0,false),inc(Dp?D.tg-Dp.tg:0,true),scopeLabel)}
    </div>
+   <div class="map-hint" style="margin:-6px 2px 16px">Valid = public posts with 300+ views (proxy). TikTok's official count also requires an accurate POI tag and content relevant to the location, which aren't in the export.</div>
 
    <div class="dash-layout">
      <div>
        <div class="card">
-         <div class="card-h"><h3><span class="dt"></span>Paid GMV trend</h3><span class="meta">cumulative · ACC + TTD</span></div>
+         <div class="card-h"><h3><span class="dt"></span>Paid GMV trend</h3><span class="meta">cumulative · ${scopeLabel}</span></div>
          <div id="gmvChart"></div>
          <div class="legend"><span><i style="background:var(--p)"></i>ACC</span><span><i style="background:var(--blue)"></i>TTD</span></div>
        </div>
        <div class="card">
-         <div class="card-h"><h3><span class="dt"></span>Valid posts · ${mLabel(mk)}</h3><span class="meta">300+ views · 15s+</span></div>
+         <div class="card-h"><h3><span class="dt"></span>Valid posts trend</h3><span class="meta">300+ views · ${scopeLabel}</span></div>
          <div id="validChart"></div>
          <div class="legend"><span><i style="background:var(--p)"></i>ACC</span><span><i style="background:var(--blue)"></i>TTD</span></div>
        </div>
@@ -599,18 +718,18 @@ function renderDash(){
    </div>`;
 
   const labels=daily.map(p=>ymd(p.d));
-  $('#gmvChart').innerHTML=daily.length?multiChart(labels,[{color:'var(--p)',vals:daily.map(p=>p.ag)},{color:'var(--blue)',vals:daily.map(p=>p.tg)}],money):'<div class="muted-note">No data.</div>';
-  const mdays=daily.filter(p=>p.d.slice(0,6)===mk);
-  $('#validChart').innerHTML=mdays.length?multiChart(mdays.map(p=>ymd(p.d)),[{color:'var(--p)',vals:mdays.map(p=>p.av)},{color:'var(--blue)',vals:mdays.map(p=>p.tv)}],fmt):'<div class="muted-note">No posts this month.</div>';
+  $('#gmvChart').innerHTML=daily.length?multiChart(labels,[{color:'var(--p)',vals:daily.map(p=>p.ag)},{color:'var(--blue)',vals:daily.map(p=>p.tg)}],money):'<div class="muted-note">No data in range.</div>';
+  $('#validChart').innerHTML=daily.length?multiChart(labels,[{color:'var(--p)',vals:daily.map(p=>p.av)},{color:'var(--blue)',vals:daily.map(p=>p.tv)}],fmt):'<div class="muted-note">No posts in range.</div>';
   renderViewTrend(list);
   renderLeaderboard(list);renderAttention(list);
+  polish($('#v-dash'));
 }
-function mini(l,v,d,note){return `<div class="mini"><div class="l">${l}</div><div class="v">${v}</div><div class="d ${d.c}">${d.t} <span class="flat" style="font-weight:700">${note}</span></div></div>`;}
-function progCard(cls,ico,title,valid,gmv,dv,dg,mk){
+function mini(l,raw,type,d,note){return `<div class="mini"><div class="l">${l}</div><div class="v">${numSpan(raw,type)}</div><div class="d ${d.c}">${d.t} <span class="flat" style="font-weight:700">${note}</span></div></div>`;}
+function progCard(cls,ico,title,valid,gmv,dv,dg,scopeLabel){
   return `<div class="progc ${cls==='ttd'?'ttd':''}">
     <div class="pt"><span class="ico">${ico}</span>${title}</div>
-    <div class="gmv">${money(gmv)}</div><div class="gl">Paid GMV · to date ${dg&&dg.t?`· <span class="${dg.c}">${dg.t}</span>`:''}</div>
-    <div class="vp"><span class="n">${fmt(valid)}</span><span class="vl">valid posts · ${mLabel(mk).split(' ')[0]} ${dv&&dv.t?`· <span class="${dv.c}">${dv.t}</span>`:''}</span></div>
+    <div class="gmv">${numSpan(gmv,'money')}</div><div class="gl">Paid GMV · ${scopeLabel} ${dg&&dg.t?`· <span class="${dg.c}">${dg.t}</span>`:''}</div>
+    <div class="vp"><span class="n">${numSpan(valid,'int')}</span><span class="vl">valid posts ${dv&&dv.t?`· <span class="${dv.c}">${dv.t}</span>`:''}</span></div>
   </div>`;}
 
 function mLabel(m){if(!m)return'—';const mm=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return mm[+m.slice(4,6)]+' '+m.slice(0,4);}
@@ -622,7 +741,7 @@ function renderLeaderboard(list){const rows=list.map(rec).filter(r=>r.snap).sort
     <div class="rank ${i<3?'t'+(i+1):''}">${i+1}</div><div class="av">${initials(r.name)}</div>
     <div class="lmid"><div class="lname">${esc(r.name)}</div><div class="lhandle">@${esc(r.u)} · ${r.snap.orders} orders</div></div>
     <div class="lstat"><div class="lgmv">${money(r.snap.sales)}</div><div class="lsub">${fmt(r.snap.views)} views</div></div></div>`).join(''):'<div class="muted-note">No GMV reported yet.</div>';
-  $$('#leaderboard .lrow').forEach(el=>el.onclick=()=>openProfile(el.dataset.u));}
+  $$('#leaderboard .lrow').forEach(el=>el.onclick=()=>openProfile(el.dataset.u));reveal($('#leaderboard'),'.lrow',45);}
 function renderAttention(list){const quiet=list.map(rec).filter(r=>{const c=r.ux.months[IDX.curMonth];return(!c||c.posts===0)&&(r.ux.posts.length||r.snap);});
   if(!quiet.length){$('#attentionCard').classList.add('hide');return;}$('#attentionCard').classList.remove('hide');
   $('#attention').innerHTML=quiet.slice(0,7).map(r=>`<div class="lrow" data-u="${r.u}">
@@ -650,6 +769,63 @@ function multiChart(labels,series,f){const W=900,H=180,pl=10,pr=10,pt=16,pb=22,i
   const tx=ti.map(i=>`<text class="axis" x="${x(i)}" y="${H-6}" text-anchor="${i===0?'start':i===n-1?'end':'middle'}">${labels[i]}</text>`).join('');
   return `<svg class="chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"><text class="axis" x="${pl}" y="11">max ${f(max)}</text>${paths}${tx}</svg>`;}
 
+/* ---------------- ADMIN (everyone) ---------------- */
+let ADM_SORT='gmv',ADM_Q='';
+function allUsers(){return [...new Set([...Object.keys(latestSnap().byUser),...Object.keys(DB.roster||{})])];}
+function renderAdmin(){
+  const total=allUsers().length,snap=latestSnap().byUser;
+  const sellers=Object.values(snap).filter(s=>s.sales>0).length;
+  const gmv=Object.values(snap).reduce((a,s)=>a+s.sales,0);
+  $('#v-admin').innerHTML=`
+   <div class="h-eyebrow">Admin · everyone</div>
+   <h1 class="h-title">All <em>creators</em></h1>
+   <div class="h-sub">Full directory of every creator in the program. Tap a row for the profile, or add anyone to your roster.</div>
+   <div class="mini-stats">
+     ${mini('Creators',total,'int',{c:'flat',t:''},'in program')}
+     ${mini('Selling',sellers,'int',{c:'flat',t:''},'GMV > $0')}
+     ${mini('Total GMV',gmv,'money',{c:'flat',t:''},'all time')}
+     ${mini('In your roster',MANAGED.size,'int',{c:'flat',t:''},'@'+(USER||''))}
+   </div>
+   <div class="adm-bar">
+     <input id="admSearch" class="inp" placeholder="🔎 Search name, handle, city or state…" autocapitalize="none" value="${esc(ADM_Q)}">
+     <div class="adm-sort">
+       <button data-s="gmv" class="${ADM_SORT==='gmv'?'on':''}">GMV</button>
+       <button data-s="views" class="${ADM_SORT==='views'?'on':''}">Views</button>
+       <button data-s="name" class="${ADM_SORT==='name'?'on':''}">A–Z</button>
+     </div>
+   </div>
+   <div class="adm-wrap"><table class="adm-table"><thead><tr>
+     <th>Creator</th><th class="hide-sm">Level</th><th class="hide-sm">Location</th><th class="r hide-sm">Views</th><th class="r">GMV</th><th class="r hide-sm">Orders</th><th class="r">Roster</th>
+   </tr></thead><tbody id="admBody"></tbody></table><div class="adm-foot" id="admFoot"></div></div>`;
+  const s=$('#admSearch');s.oninput=()=>{ADM_Q=s.value;drawAdminTable();};
+  $$('#v-admin .adm-sort button').forEach(b=>b.onclick=()=>{ADM_SORT=b.dataset.s;$$('#v-admin .adm-sort button').forEach(x=>x.classList.toggle('on',x===b));drawAdminTable();});
+  drawAdminTable();polish($('#v-admin'));
+}
+function drawAdminTable(){const snap=latestSnap().byUser;const q=ADM_Q.trim().toLowerCase();
+  let rows=allUsers().map(u=>{const r=rec(u),sp=r.snap;const st=normState(r.ro.state)||'';
+    return{u,name:r.name,lv:levelNum(u),loc:[r.ro.city,st].filter(Boolean).join(', '),st,city:r.ro.city||'',
+      gmv:sp?sp.sales:0,views:sp?sp.views:0,orders:sp?sp.orders:0};});
+  if(q)rows=rows.filter(r=>r.u.includes(q)||r.name.toLowerCase().includes(q)||r.loc.toLowerCase().includes(q)||(STATE_NAMES[r.st]||'').toLowerCase().includes(q));
+  rows.sort(ADM_SORT==='name'?(a,b)=>a.name.localeCompare(b.name):ADM_SORT==='views'?(a,b)=>b.views-a.views:(a,b)=>b.gmv-a.gmv);
+  const cap=150,shown=rows.slice(0,cap);
+  $('#admBody').innerHTML=shown.map(r=>`<tr data-u="${esc(r.u)}">
+    <td><div class="adm-cre"><div class="av">${initials(r.name)}</div><div style="min-width:0"><div class="nm">${esc(r.name)}</div><div class="hd">@${esc(r.u)}</div></div></div></td>
+    <td class="hide-sm"><span class="adm-lv" style="background:${LVCOLOR[r.lv]}">${LVLABEL[r.lv]}</span></td>
+    <td class="hide-sm">${esc(r.loc)||'<span style="color:var(--mul)">—</span>'}</td>
+    <td class="r hide-sm">${r.views?fmt(r.views):'–'}</td>
+    <td class="r">${r.gmv?money(r.gmv):'–'}</td>
+    <td class="r hide-sm">${r.orders||'–'}</td>
+    <td class="r"><button class="adm-add ${MANAGED.has(r.u)?'in':''}" data-add="${esc(r.u)}">${MANAGED.has(r.u)?'✓ Added':'+ Add'}</button></td>
+  </tr>`).join('')||`<tr><td colspan="7"><div class="muted-note">No creators match “${esc(q)}”.</div></td></tr>`;
+  $('#admFoot').textContent=rows.length>cap?`Showing top ${cap} of ${rows.length} — refine your search to narrow down.`:`${rows.length} creator${rows.length!==1?'s':''}`;
+  $$('#admBody tr[data-u]').forEach(tr=>tr.onclick=e=>{if(e.target.dataset.add)return;openProfile(tr.dataset.u);});
+  $$('#admBody .adm-add').forEach(b=>b.onclick=e=>{e.stopPropagation();admAdd(b.dataset.add);});
+}
+function admAdd(u){const had=MANAGED.has(u);if(had)MANAGED.delete(u);else MANAGED.add(u);saveManaged();
+  drawAdminTable();renderRoster();renderMap();renderCoach();
+  $('#v-admin .mini:nth-child(4) .v')&&($('#v-admin .mini:nth-child(4) .v').textContent=NF.int(MANAGED.size));
+  toast(had?'Removed from roster':'Added to your roster');}
+
 /* ---------------- ROSTER ---------------- */
 function renderRoster(){
   $('#v-roster').innerHTML=`
@@ -668,12 +844,12 @@ function renderRoster(){
   $('#filterInp').addEventListener('input',drawRosterGrid);
   drawRosterGrid();
 }
-function refreshAll(){renderDash();renderRoster();renderCoach();renderMap();}
+function refreshAll(){renderDash();renderAdmin();renderRoster();renderCoach();renderMap();}
 function addUsernames(raw){const parts=raw.split(/[\s,;\n]+/).map(s=>s.replace(/^@/,'').trim().toLowerCase()).filter(Boolean);
   let a=0;parts.forEach(u=>{if(!MANAGED.has(u)){MANAGED.add(u);a++;}});if(a){saveManaged();refreshAll();}toast(a?`Added ${a}`:'Already in roster');}
 function drawRosterGrid(){const q=($('#filterInp')&&$('#filterInp').value||'').trim().toLowerCase();
   let list=[...MANAGED];if(q)list=list.filter(u=>{const r=rec(u);return u.includes(q)||r.name.toLowerCase().includes(q);});
-  if(!MANAGED.size){$('#rosterGrid').innerHTML=`<div class="empty" style="grid-column:1/-1"><div class="big">☷</div><h4>No creators yet</h4><p>Type a username above, or pull everyone in from your latest uploads.</p><button class="addbtn" style="padding:0 22px" onclick="document.getElementById('syncBtn').click()">Sync from roster file</button></div>`;return;}
+  if(!MANAGED.size){$('#rosterGrid').innerHTML=`<div class="empty" style="grid-column:1/-1"><div class="big">☷</div><h4>Your roster is empty</h4><p>Add creators by username above, or browse the full directory in the <b>Admin</b> tab and tap “+ Add”.</p><button class="addbtn" style="padding:0 22px" onclick="go('admin')">Browse all creators</button></div>`;return;}
   if(!list.length){$('#rosterGrid').innerHTML=`<div class="empty" style="grid-column:1/-1"><div class="big">🔎</div><h4>No matches</h4><p>Nothing matches “${esc(q)}”.</p></div>`;return;}
   const rows=list.map(rec).sort((a,b)=>{const ag=a.snap?a.snap.sales:-1,bg=b.snap?b.snap.sales:-1;return bg-ag||a.name.localeCompare(b.name);});
   $('#rosterGrid').innerHTML=rows.map(r=>{const has=!!r.snap;
@@ -681,7 +857,7 @@ function drawRosterGrid(){const q=($('#filterInp')&&$('#filterInp').value||'').t
     return `<div class="ccard" data-u="${r.u}"><button class="x" data-rm="${r.u}">✕</button><div class="av">${initials(r.name)}</div>
       <div class="cinfo"><div class="cname">${esc(r.name)}</div><div class="chandle">@${esc(r.u)}${r.prof.level?` · ${r.prof.level}`:''}</div><div class="cmetrics">${m}</div></div></div>`;}).join('');
   $$('#rosterGrid .ccard').forEach(el=>el.onclick=e=>{if(e.target.dataset.rm)return;openProfile(el.dataset.u);});
-  $$('#rosterGrid .x').forEach(b=>b.onclick=e=>{e.stopPropagation();MANAGED.delete(b.dataset.rm);saveManaged();refreshAll();toast('Removed @'+b.dataset.rm);});}
+  $$('#rosterGrid .x').forEach(b=>b.onclick=e=>{e.stopPropagation();MANAGED.delete(b.dataset.rm);saveManaged();refreshAll();toast('Removed @'+b.dataset.rm);});reveal($('#rosterGrid'),'.ccard',30);}
 
 /* ---------------- MODAL / PROFILE ---------------- */
 function openModal(html,wide){$('#modal').className='modal'+(wide?' wide':'');$('#modal').innerHTML=`<button class="mclose" onclick="closeModal()">✕</button>`+html;$('#overlay').classList.add('open');document.body.style.overflow='hidden';$('#modal').scrollTop=0;}
@@ -693,7 +869,7 @@ function openProfile(u){const r=rec(u),s=r.snap,lv=r.prof.level==='Lv.2'?'lv2':'
   const loc=[r.ro.city||r.prof.city,r.ro.state].filter(Boolean).join(', ');
   const c=r.ux.months[IDX.curMonth]||{posts:0,views:0,sales:0},p=r.ux.months[IDX.prevMonth]||null;
   const cg=monthSnapGMV(u,IDX.curMonth),pg=monthSnapGMV(u,IDX.prevMonth);
-  const kgrid=s?`<div class="kgrid">${kc('GMV',money(s.sales))}${kc('Orders',s.orders)}${kc('AOV',money(s.aov))}${kc('Views',fmt(s.views))}${kc('Posts w/ views',s.postsViews)}${kc('Posts w/ sales',s.postsSales)}${kc('CVR',pct(s.cvr))}${kc('Redemption',money(s.redemption))}</div>`:`<div class="muted-note" style="text-align:left;padding:8px 0">No performance snapshot yet — fills in on the next upload including @${esc(u)}.</div>`;
+  const kgrid=s?`<div class="kgrid">${kc('GMV',numSpan(s.sales,'money'))}${kc('Orders',numSpan(s.orders,'int'))}${kc('AOV',numSpan(s.aov,'money'))}${kc('Views',numSpan(s.views,'fmt'))}${kc('Posts w/ views',numSpan(s.postsViews,'int'))}${kc('Posts w/ sales',numSpan(s.postsSales,'int'))}${kc('CVR',pct(s.cvr))}${kc('Redemption',numSpan(s.redemption,'money'))}</div>`:`<div class="muted-note" style="text-align:left;padding:8px 0">No performance snapshot yet — fills in on the next upload including @${esc(u)}.</div>`;
   const days=Object.keys(r.ux.days).sort().slice(-30);
   const chart=days.length?areaChart(days.map(ymd),days.map(d=>r.ux.days[d].views),fmt):'<div class="muted-note">No posts on record.</div>';
   const C=[['✉','Email',r.ro.email,1],['☎','Phone',r.ro.phone,1],['◈','Discord',r.ro.discord,1],['◉','Creator manager',r.ro.manager,0],['◷','Webinar',r.ro.webinar,0],['⌖','Location',loc,0]].filter(x=>x[2]).map(([ic,k,v,cp])=>`<div class="crow"><div class="ci">${ic}</div><div style="min-width:0"><div class="ck">${k}</div><div class="cvv">${esc(v)}</div></div>${cp?`<button class="cpy" data-cp="${esc(v)}">copy</button>`:''}</div>`).join('')||`<div class="muted-note" style="text-align:left;padding:8px 0">No contact details on file.</div>`;
@@ -713,7 +889,8 @@ function openProfile(u){const r=rec(u),s=r.snap,lv=r.prof.level==='Lv.2'?'lv2':'
       ${posts.length?`<div style="overflow-x:auto"><table class="ptable"><thead><tr><th>Date</th><th>Post</th><th>Vert.</th><th class="r">Views</th><th class="r">Sales</th><th class="r">Len</th></tr></thead><tbody>${rows}</tbody></table></div>${posts.length>30?`<div class="muted-note">latest 30 of ${posts.length}</div>`:''}`:'<div class="muted-note">No posts on record.</div>'}
       <div class="mactions"><button class="save" onclick="coachFor('${esc(u)}')">✦ Generate coaching guide</button></div>
     </div>`);
-  $$('#modal .cpy').forEach(b=>b.onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(b.dataset.cp);toast('Copied');});}
+  $$('#modal .cpy').forEach(b=>b.onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(b.dataset.cp);toast('Copied');});
+  runCounters($('#modal'));reveal($('#modal'),'.kc',40);reveal($('#modal'),'.momc',60);}
 function kc(l,v){return `<div class="kc"><div class="l">${l}</div><div class="v">${v}</div></div>`;}
 function momCard(l,cv,c,p,f){let d='<div class="md flat">—</div>',mp='';
   if(c!=null&&p!=null&&p){const dl=(c-p)/p*100,cls=dl>0.5?'up':dl<-0.5?'down':'flat';d=`<div class="md ${cls}">${dl>0?'▲':dl<0?'▼':'•'} ${Math.abs(dl).toFixed(0)}%</div>`;mp=`<div class="mp">was ${f(p)}</div>`;}
@@ -729,6 +906,7 @@ const TIPS={
   cadenceTtd:['Keep TTD evergreen','Attractions are discovery-driven: post <b>Wednesday night → Sunday morning</b> and make content searchable for when someone nearby asks "what do we do today."'],
   hook:['Win the first 3 seconds','Most viewers decide to stay or scroll before 3s. Open on the most striking shot — no slow intros or logos.'],
   marketplace:['Post through the marketplace','Publish via the marketplace with the location tag confirmed — direct posts won\'t earn. Marketplace → Select Location → Drafts → Confirm Tag → Post.'],
+  valid:['Make posts count as valid','TikTok validates a post on three things: it\'s <b>public</b> (showing on the FYP), the <b>POI tag accurately matches</b> the featured place (tag the exact hotel/attraction, not a generic area), and the content is <b>genuinely about that location</b> — most of the video should showcase the place, not unrelated footage.'],
   convert:['Fix the CTA, not the camera','Turn views into orders with a clear call to action — tell viewers exactly what to tap and why now (limited rooms, weekend pricing).'],
   markets:['Own a few markets','Film overlooked markets instead of scattering. A shortlist of 3–5 locations you own beats one post everywhere.']
 };
@@ -755,7 +933,7 @@ function analyze(u){const r=rec(u),B=DB.benchmarks,s=r.snap||{sales:0,orders:0,a
   else if(med>B.sweetHigh){fix.push(['⏱️','Videos run long',`Median <b>${med}s</b> is above the 30s band where top earners cluster. Tighten toward ~21s.`]);tips.add('length');}
   // valid rate
   if(seen.length){if(vrate>=B.validRate)good.push(['🎯','High valid rate',`<b>${pct(vrate)}</b> of posts clear 300 views & 15s — above the ${pct(B.validRate)} agency rate.`]);
-    else{fix.push(['🎯','Valid rate below agency',`<b>${pct(vrate)}</b> of posts qualify vs ${pct(B.validRate)} agency. More posts need to clear 300 views — stronger hooks.`]);tips.add('hook');}}
+    else{fix.push(['🎯','Valid rate below agency',`<b>${pct(vrate)}</b> of posts reach 300+ views vs ${pct(B.validRate)} agency. Stronger hooks lift reach — and make sure each post is public, accurately POI-tagged, and on-topic so it counts as valid.`]);tips.add('hook');tips.add('valid');}}
   // reach
   if(avgV>=B.topEarnerAvgViews*0.5)good.push(['👁️','Strong reach',`Averaging <b>${fmt(avgV)} views/post</b> — top-earner territory (${fmt(B.topEarnerAvgViews)}).`]);
   else if(avgV&&avgV<1000){fix.push(['👁️','Low reach',`Averaging <b>${fmt(avgV)} views/post</b>. Top earners average ${fmt(B.topEarnerAvgViews)}. Win the first 3 seconds to lift watch time.`]);tips.add('hook');}
@@ -769,6 +947,7 @@ function analyze(u){const r=rec(u),B=DB.benchmarks,s=r.snap||{sales:0,orders:0,a
   // cadence tip by dominant vertical
   if(accShare>=0.5)tips.add('cadenceAcc');else tips.add('cadenceTtd');
   if(lvl.k==='L1')tips.add('markets');
+  if(lvl.k==='L0'){tips.add('valid');tips.add('marketplace');}
   // milestone
   let milestone;
   if(lvl.k==='L0')milestone=`${Math.max(0,10-valid.length)} more valid posts to hit 10, then your first sale.`;
@@ -819,6 +998,7 @@ function coachFor(u){if(CUR!=='coach')go('coach');closeModal();
       <div class="thesis" style="margin-top:18px"><b>Next milestone:</b> ${a.milestone}</div>
       <div class="mactions"><button class="ghost" onclick="window.print()">⎙ Save as PDF</button><button class="ghost" onclick="openProfile('${esc(r.u)}')">View full profile</button></div>
     </div></div>`;
+  reveal($('#coachReport'),'.ins',45);reveal($('#coachReport'),'.thesis',120);runCounters($('#coachReport'));
   window.scrollTo({top:0});
 }
 
@@ -833,42 +1013,77 @@ function matchCity(st,cityRaw){const geo=DB.citygeo&&DB.citygeo[st];if(!geo||!ci
     if(nm.includes(' ')){if(c.includes(nm))return geo[nm];}
     else{if(new RegExp('\\b'+nm.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b').test(c))return geo[nm];}}
   return null;}
+const LVCOLOR=['#94a3b8','#22d3ee','#34d399','#fb923c','#a855f7'];
+const LVLABEL=['L0','L1','L2','L3','L4'];
+function levelNum(u){const p=DB.profiles[u]||{};const m=/(\d+)/.exec(p.level||'');return m?Math.min(4,Math.max(0,+m[1])):0;}
 function geoData(){const byState={},pins=[];
   [...MANAGED].forEach(u=>{const r=DB.roster[u]||{};const st=normState(r.state);if(!st)return;
     (byState[st]=byState[st]||[]).push(u);
-    const ux=IDX.byUser[u];const ttd=ux&&ux.ttd>ux.acc;
     let xy=matchCity(st,r.city);const c=DB.usmap.centroids[st]||[480,300];const j=hash(u);
     if(xy){xy=[xy[0]+((j%14)-7)*0.5,xy[1]+(((j>>8)%14)-7)*0.5];}
     else{xy=[c[0]+((j%40)-20)*0.7,c[1]+(((j>>8)%40)-20)*0.7];}
-    pins.push({u,x:xy[0],y:xy[1],ttd});});
+    pins.push({u,x:xy[0],y:xy[1],lvl:levelNum(u)});});
   return{byState,pins};}
 function renderMap(){
   if(!DB.usmap){$('#v-map').innerHTML='<div class="muted-note" style="padding-top:60px">Map data not found — make sure <b>usmap.json</b> is in the repo before building.</div>';return;}
   const{byState,pins}=geoData();const counts=Object.fromEntries(Object.entries(byState).map(([s,a])=>[s,a.length]));
   const max=Math.max(1,...Object.values(counts));const located=[...MANAGED].filter(u=>normState((DB.roster[u]||{}).state)).length;
   const shade=n=>{if(!n)return'var(--bg2)';const a=(0.16+0.66*(n/max)).toFixed(2);return`rgba(249,115,22,${a})`;};
-  const paths=Object.entries(DB.usmap.paths).map(([st,d])=>`<path class="st" data-st="${st}" d="${d}" style="fill:${shade(counts[st]||0)}"><title>${STATE_NAMES[st]||st} · ${counts[st]||0}</title></path>`).join('');
+  const paths=Object.entries(DB.usmap.paths).map(([st,d])=>`<path class="st" data-st="${st}" data-has="${counts[st]?1:0}" data-n="${counts[st]||0}" d="${d}" style="fill:${shade(counts[st]||0)}"><title>${STATE_NAMES[st]||st} · ${counts[st]||0}</title></path>`).join('');
   const labels=Object.entries(counts).map(([st,n])=>{const c=DB.usmap.centroids[st];if(!c||!n)return'';const fs=n>=10?13:11;return`<text class="cnt" x="${c[0]}" y="${c[1]+4}" text-anchor="middle" font-size="${fs}">${n}</text>`;}).join('');
-  const dots=pins.map(p=>`<circle class="pin ${p.ttd?'ttd':''}" cx="${p.x}" cy="${p.y}" r="2.6"></circle>`).join('');
+  const dots=pins.map((p,i)=>`<circle class="pin" cx="${p.x}" cy="${p.y}" r="2.8" style="fill:${LVCOLOR[p.lvl]};color:${LVCOLOR[p.lvl]};animation-delay:${(i*53)%3000}ms"><title>@${esc(p.u)} · ${LVLABEL[p.lvl]}</title></circle>`).join('');
+  const lvCounts=[0,0,0,0,0];pins.forEach(p=>lvCounts[p.lvl]++);
+  const lvLegend=lvCounts.map((n,i)=>n?`<span><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${LVCOLOR[i]};margin-right:5px"></span>${LVLABEL[i]} · ${n}</span>`:'').join('');
+  const dark=document.documentElement.dataset.theme==='dark';
   $('#v-map').innerHTML=`
    <div class="h-eyebrow">Creator map</div>
    <h1 class="h-title">Where your <em>creators</em> are</h1>
-   <div class="h-sub">${located} of ${MANAGED.size} managed creators located · ${pins.filter(p=>1).length} on the map · tap a state for contacts</div>
+   <div class="h-sub">${located} of ${MANAGED.size} managed creators located · ${pins.length} on the map · coloured by level · drag to pan · scroll or pinch to zoom</div>
    <div class="map-wrap">
      <div class="maptip" id="maptip"></div>
-     <svg class="usmap" viewBox="${DB.usmap.viewBox}" id="usSvg">${paths}<g>${dots}</g>${labels}</svg>
+     <button class="night-toggle" id="nightToggle">${dark?'☀️ Day map':'🌙 Night lights'}</button>
+     <div class="map-ctrls"><button id="zIn" title="Zoom in">+</button><button id="zOut" title="Zoom out">−</button><button id="zReset" title="Reset">⌂</button></div>
+     <svg class="usmap" viewBox="${DB.usmap.viewBox}" id="usSvg"><g id="mapZoom">${paths}<g>${dots}</g>${labels}</g></svg>
      <div class="map-legend">
        <span>Fewer</span><div class="scale-bar"><i style="background:rgba(249,115,22,.16)"></i><i style="background:rgba(249,115,22,.4)"></i><i style="background:rgba(249,115,22,.6)"></i><i style="background:rgba(249,115,22,.82)"></i></div><span>More</span>
-       <span style="margin-left:auto"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--p);margin-right:5px"></span>ACC creator</span>
-       <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--blue);margin-right:5px"></span>TTD creator</span>
+       <span style="flex-basis:100%;height:0"></span>
+       ${lvLegend}
      </div>
-     <div class="map-hint">Dots placed by town where recognizable, otherwise clustered in-state.</div>
+     <div class="map-hint">Dots placed by town where recognizable, otherwise clustered in-state.${dark?' Night mode shows each creator as a glowing city light.':''}</div>
    </div>`;
+  $('#nightToggle').onclick=()=>{setTheme(document.documentElement.dataset.theme==='dark'?'light':'dark');renderMap();};
+  setupMapZoom();
   const svg=$('#usSvg'),tip=$('#maptip'),wrap=svg.closest('.map-wrap');
-  $$('#usSvg path.st').forEach(p=>{const st=p.dataset.st,n=counts[st]||0;
-    p.onclick=()=>{if(n)openStatePanel(st);else toast(`No managed creators in ${STATE_NAMES[st]||st}`);};
+  $$('#usSvg path.st').forEach(p=>{const st=p.dataset.st,n=+p.dataset.n;
     p.onmousemove=e=>{const r=wrap.getBoundingClientRect();tip.textContent=`${STATE_NAMES[st]||st} · ${n}`;tip.style.left=(e.clientX-r.left+12)+'px';tip.style.top=(e.clientY-r.top+12)+'px';tip.classList.add('show');};
     p.onmouseleave=()=>tip.classList.remove('show');});
+  polish($('#v-map'));
+}
+let mapK=1,mapX=0,mapY=0,_mapDragged=false;
+function setupMapZoom(){
+  const svg=$('#usSvg'),g=$('#mapZoom');if(!svg||!g)return;const VBW=975,VBH=610;
+  mapK=1;mapX=0;mapY=0;
+  function clamp(){const mnX=VBW*(1-mapK),mnY=VBH*(1-mapK);mapX=Math.min(0,Math.max(mnX,mapX));mapY=Math.min(0,Math.max(mnY,mapY));}
+  function apply(snap){clamp();g.classList.toggle('snap',!!snap);g.setAttribute('transform',`translate(${mapX.toFixed(2)} ${mapY.toFixed(2)}) scale(${mapK.toFixed(3)})`);if(snap)setTimeout(()=>g.classList.remove('snap'),460);}
+  function vb(cx,cy){const r=svg.getBoundingClientRect();return [(cx-r.left)/r.width*VBW,(cy-r.top)/r.height*VBH];}
+  function zoomAt(vx,vy,f,snap){const nk=Math.min(9,Math.max(1,mapK*f));const gx=(vx-mapX)/mapK,gy=(vy-mapY)/mapK;mapK=nk;mapX=vx-mapK*gx;mapY=vy-mapK*gy;apply(snap);}
+  apply(false);
+  svg.addEventListener('wheel',e=>{e.preventDefault();const[vx,vy]=vb(e.clientX,e.clientY);zoomAt(vx,vy,e.deltaY<0?1.18:1/1.18,false);},{passive:false});
+  const pts=new Map();let last=null,pinchD=0,moved=0;
+  svg.addEventListener('pointerdown',e=>{try{svg.setPointerCapture(e.pointerId);}catch(_){}pts.set(e.pointerId,{x:e.clientX,y:e.clientY});moved=0;_mapDragged=false;
+    if(pts.size===1){last={x:e.clientX,y:e.clientY};svg.classList.add('grabbing');}
+    else if(pts.size===2){const a=[...pts.values()];pinchD=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);}});
+  svg.addEventListener('pointermove',e=>{if(!pts.has(e.pointerId))return;pts.set(e.pointerId,{x:e.clientX,y:e.clientY});const r=svg.getBoundingClientRect();
+    if(pts.size>=2){const a=[...pts.values()];const d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);if(pinchD){const[vx,vy]=vb((a[0].x+a[1].x)/2,(a[0].y+a[1].y)/2);zoomAt(vx,vy,d/pinchD,false);}pinchD=d;_mapDragged=true;return;}
+    if(last){const dx=e.clientX-last.x,dy=e.clientY-last.y;moved+=Math.abs(dx)+Math.abs(dy);if(moved>6)_mapDragged=true;mapX+=dx/r.width*VBW;mapY+=dy/r.height*VBH;last={x:e.clientX,y:e.clientY};apply(false);}});
+  function up(e){const tap=pts.size===1&&!_mapDragged;pts.delete(e.pointerId);if(pts.size<2)pinchD=0;
+    if(pts.size===0){last=null;svg.classList.remove('grabbing');
+      if(tap){const el=document.elementFromPoint(e.clientX,e.clientY);if(el&&el.classList&&el.classList.contains('st')){const st=el.dataset.st,n=+el.dataset.n;if(n)openStatePanel(st);else toast('No managed creators in '+(STATE_NAMES[st]||st));}}}
+    else if(pts.size===1){const a=[...pts.values()][0];last={x:a.x,y:a.y};}}
+  svg.addEventListener('pointerup',up);svg.addEventListener('pointercancel',up);
+  $('#zIn').onclick=()=>zoomAt(VBW/2,VBH/2,1.5,true);
+  $('#zOut').onclick=()=>zoomAt(VBW/2,VBH/2,1/1.5,true);
+  $('#zReset').onclick=()=>{mapK=1;mapX=0;mapY=0;apply(true);};
 }
 function openStatePanel(st){const users=(geoData().byState[st]||[]).map(rec).sort((a,b)=>(b.snap?b.snap.sales:0)-(a.snap?a.snap.sales:0));
   $$('#usSvg path.st').forEach(p=>p.classList.toggle('sel',p.dataset.st===st));
@@ -883,10 +1098,16 @@ function openStatePanel(st){const users=(geoData().byState[st]||[]).map(rec).sor
         const F=[['✉','Email',r.ro.email],['☎','Phone',r.ro.phone],['◈','Discord',r.ro.discord],['◉','Manager',r.ro.manager]].filter(x=>x[2])
           .map(([ic,k,v])=>`<div class="dc-field"><span class="ci">${ic}</span><div style="min-width:0"><div class="ck">${k}</div><div class="cv">${esc(v)}</div></div><button class="cpy" data-cp="${esc(v)}">copy</button></div>`).join('');
         const stat=s?`<div class="dc-stat"><div><div class="v">${money(s.sales)}</div><div class="l">GMV</div></div><div><div class="v">${fmt(s.views)}</div><div class="l">Views</div></div><div><div class="v">${s.orders}</div><div class="l">Orders</div></div></div>`:'';
-        return `<div class="dc"><div class="dc-top"><div class="av">${initials(r.name)}</div><div style="min-width:0"><div class="dc-name">${esc(r.name)}</div><div class="dc-handle">@${esc(r.u)}${loc?` · ${esc(loc)}`:''}</div></div></div>${F||'<div class="dc-handle">No contact details on file.</div>'}${stat}<div class="dc-field" style="border-top:1px solid var(--br)"><span class="ci">↗</span><div style="min-width:0"><div class="ck">Profile</div></div><button class="cpy" onclick="closeDrawer();openProfile('${esc(r.u)}')">open</button></div></div>`;}).join('');
+        return `<div class="dc"><div class="dc-top"><div class="av">${initials(r.name)}</div><div style="min-width:0"><div class="dc-name">${esc(r.name)}</div><div class="dc-handle">@${esc(r.u)}${loc?` · ${esc(loc)}`:''}</div></div><span class="lvpill" style="background:${LVCOLOR[levelNum(r.u)]}">${LVLABEL[levelNum(r.u)]}</span></div>${F||'<div class="dc-handle">No contact details on file.</div>'}${stat}<div class="dc-field" style="border-top:1px solid var(--br)"><span class="ci">↗</span><div style="min-width:0"><div class="ck">Profile</div></div><button class="cpy" onclick="closeDrawer();openProfile('${esc(r.u)}')">open</button></div><button class="ex-btn" onclick="toggleEx('${esc(r.u)}',this)">▦ Content examples</button><div class="examples" id="ex-${esc(r.u)}"></div></div>`;}).join('');
     $$('#drawerBody .cpy[data-cp]').forEach(b=>b.onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(b.dataset.cp);toast('Copied');});
   },480);
 }
+const tiktokUrl=(u,id)=>`https://www.tiktok.com/@${u}/video/${id}`;
+function toggleEx(u,btn){const box=$('#ex-'+(window.CSS&&CSS.escape?CSS.escape(u):u))||document.getElementById('ex-'+u);
+  if(!box)return;const open=box.classList.toggle('open');btn.textContent=open?'▴ Hide examples':'▦ Content examples';
+  if(open&&!box.dataset.done){const ux=IDX.byUser[u];const top=ux?[...ux.posts].sort((a,b)=>b.views-a.views).slice(0,3):[];
+    box.innerHTML=top.length?top.map((p,i)=>`<div class="ex-row"><div class="ex-rank">${i+1}</div><div class="ex-info"><div class="ex-title" title="${esc(p.title)}">${esc(p.title||'(untitled)')}</div><div class="ex-sub">${fmt(p.views)} views · ${p.sales?money(p.sales)+' · ':''}${p.ind||''} · ${ymd(p.date)}</div></div>${p.id?`<a class="ex-watch" href="${tiktokUrl(u,p.id)}" target="_blank" rel="noopener">▶ Watch</a>`:''}</div>`).join(''):'<div class="dc-handle" style="padding:6px 0">No posts on record.</div>';
+    box.dataset.done='1';}}
 function copyState(st){const users=(geoData().byState[st]||[]).map(rec).sort((a,b)=>(b.snap?b.snap.sales:0)-(a.snap?a.snap.sales:0));
   const txt=users.map(r=>[`${r.name} (@${r.u})`,r.ro.city?`Location: ${r.ro.city}, ${st}`:`State: ${st}`,r.ro.email?`Email: ${r.ro.email}`:'',r.ro.phone?`Phone: ${r.ro.phone}`:'',r.ro.discord?`Discord: ${r.ro.discord}`:'',r.ro.manager?`Manager: ${r.ro.manager}`:'',r.snap?`GMV: ${money(r.snap.sales)} · ${r.snap.orders} orders`:''].filter(Boolean).join('\n')).join('\n\n');
   navigator.clipboard&&navigator.clipboard.writeText(`${STATE_NAMES[st]||st} — ${users.length} creators\n\n${txt}`);
@@ -911,7 +1132,7 @@ function renderWebinars(){
         <div class="deck-body"><div class="deck-k">${d.k}</div><div class="deck-t">${d.name}</div><div class="deck-d">${d.desc}</div>
         <span class="deck-go">▶ Present deck</span></div></div>`).join('')}
    </div>`;
-  $$('#v-webinars .deckc').forEach(el=>el.onclick=()=>openDeck(DECKS[+el.dataset.i]));
+  $$('#v-webinars .deckc').forEach(el=>el.onclick=()=>openDeck(DECKS[+el.dataset.i]));reveal($('#v-webinars'),'.deckc',80);
 }
 let _deckKeyHandler=null;
 function openDeck(d){const f=$('#presFrame');

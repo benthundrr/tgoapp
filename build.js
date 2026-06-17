@@ -122,7 +122,7 @@ function buildSnapshots(profiles) {
 }
 
 /* ContentAnalysis → posts (dedup by Post ID across files, keep latest) */
-const VALID = p => p.views >= 300 && p.dur >= 15;
+const VALID = p => p.views >= 300; // public/reached proxy (TikTok's true valid count adds POI-match + relevance, not in export)
 function indCode(s) {
   s = (s || '').toLowerCase();
   if (s.includes('acc') && s.includes('ttd')) return 'BOTH';
@@ -153,7 +153,7 @@ function buildPosts(profiles) {
       if (!profiles[u].name) profiles[u].name = norm(r[I.cname]) || norm(r[I.cid]);
       if (!profiles[u].level && I.level >= 0) profiles[u].level = norm(r[I.level]);
       map.set(pid, {
-        u, date: norm(r[I.date]),
+        u, id: pid, date: norm(r[I.date]),
         title: norm(r[I.title]).slice(0, 120),
         ind: indCode(r[I.ind]),
         views: num(r[I.views]), sales: r2(num(r[I.sales])), orders: num(r[I.orders]),
