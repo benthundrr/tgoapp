@@ -103,10 +103,16 @@ label.fld{display:block;font-size:11px;font-weight:800;letter-spacing:.1em;text-
 .seg button{border:none;background:none;font-weight:800;font-size:12.5px;color:var(--mu);padding:8px 17px;border-radius:100px;transition:all .18s}
 .seg button.on{background:var(--p);color:#fff;box-shadow:0 4px 12px var(--pb)}
 .seg button:not(.on):hover{color:var(--fg)}
-.kstrip{display:flex;flex-wrap:wrap;gap:12px 26px}
-.kstrip .k{min-width:80px}
-.kstrip .kl{font-size:9.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--mu)}
-.kstrip .kv{font-size:clamp(18px,2.4vw,23px);font-weight:900;letter-spacing:-.02em;margin-top:3px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:8px 0 22px}
+.kpi{background:var(--bg2);border:1px solid var(--br);border-radius:16px;padding:15px 17px;display:flex;flex-direction:column;justify-content:center;min-height:84px}
+.kpi .kl{font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--mu)}
+.kpi .kv{font-size:clamp(19px,2.3vw,25px);font-weight:900;letter-spacing:-.02em;margin-top:6px}
+.kpi.hero{grid-column:1/-1;background:linear-gradient(135deg,#f97316,#ea580c);border:none;color:#fff;padding:22px 26px;box-shadow:0 14px 34px var(--pb);position:relative;overflow:hidden}
+.kpi.hero::after{content:"";position:absolute;right:-40px;top:-40px;width:180px;height:180px;background:radial-gradient(circle,rgba(255,255,255,.18),transparent 70%);pointer-events:none}
+.kpi.hero .kl{color:rgba(255,255,255,.92)}
+.kpi.hero .kv{font-size:clamp(36px,6.5vw,54px);font-weight:900;line-height:1;margin-top:10px;color:#fff}
+.kpi.hero .kcap{font-size:12px;color:rgba(255,255,255,.9);font-weight:600;margin-top:10px}
+@media(max-width:640px){.kpis{grid-template-columns:repeat(2,1fr)}.kpi.hero .kv{font-size:40px}}
 .examples{margin-top:10px;border-top:1px solid var(--br);padding-top:10px;display:none}
 .examples.open{display:block;animation:fade .25s ease both}
 .ex-row{display:flex;align-items:center;gap:10px;padding:7px 0}
@@ -592,7 +598,7 @@ function animateNum(el){const to=+el.dataset.count;if(isNaN(to))return;const f=N
 function runCounters(root){(root||document).querySelectorAll('.num[data-count]').forEach(animateNum);}
 function reveal(root,sel,step){if(REDUCE)return;const els=(root||document).querySelectorAll(sel);
   els.forEach((el,i)=>{el.style.animationDelay=(i*(step||55))+'ms';el.classList.remove('reveal');void el.offsetWidth;el.classList.add('reveal');});}
-function polish(root){runCounters(root);reveal(root,'.mini',55);reveal(root,'.progc',90);reveal(root,'.card',70);}
+function polish(root){runCounters(root);reveal(root,'.kpi',60);reveal(root,'.mini',55);reveal(root,'.progc',90);reveal(root,'.card',70);}
 
 /* theme */
 function setTheme(t){document.documentElement.dataset.theme=t;localStorage.setItem(LS.theme,t);$('#themeBtn').textContent=t==='dark'?'☀️':'🌙';}
@@ -689,8 +695,9 @@ function renderDash(){
   const del=(c,p)=>{if(p==null||!p)return{c:'flat',t:''};const d=(c-p)/p*100;return{c:d>0.5?'up':d<-0.5?'down':'flat',t:(d>0?'▲':d<0?'▼':'•')+Math.abs(d).toFixed(0)+'%'};};
   const scopeLabel=scope==='all'?'All time':mLabel(scope),mShort=scope==='all'?'all-time':mLabel(scope).split(' ')[0];
   const expRange=`${ymd(K.start)}–${ymd(K.end)}`;
-  const expTitle=scope==='all'?`All-time · ${expRange}`:(K.matched?`${mShort} export · ${expRange}`:`${mShort} · estimated from posts`);
-  const expMeta=K.estimated?'no GO export uploaded for this month yet':(scope==='all'?`sum of ${K.nSnaps} monthly exports`:'authoritative · matches GO portal');
+  const heroCap=K.estimated?`${expRange} · estimated from posts — no GO data for this month yet`
+    :(scope==='all'?`${expRange} · ${K.nSnaps} months combined · ${K.sellers} creators selling`
+    :`${expRange} · matches your TikTok GO portal · ${K.sellers} selling`);
   const chips=[...IDX.months].reverse().map(x=>`<button class="chip ${scope===x?'on':''}" onclick="setScope('${x}')">${mLabel(x).split(' ')[0]}</button>`).join('')+`<button class="chip ${scope==='all'?'on':''}" onclick="setScope('all')">All time</button>`;
 
   // GMV trend scaled so its endpoint equals the authoritative scope GMV
@@ -703,15 +710,16 @@ function renderDash(){
 
    <div class="chips" style="margin-top:16px">${chips}</div>
 
-   <div class="card tight" style="margin:4px 0 18px">
-     <div class="card-h"><h3><span class="dt"></span>${expTitle}</h3><span class="meta">${expMeta}</span></div>
-     <div class="kstrip">
-       <div class="k"><div class="kl">Paid GMV</div><div class="kv">${numSpan(K.gmv,'moneyC')}</div></div>
-       <div class="k"><div class="kl">Orders</div><div class="kv">${K.matched?numSpan(K.orders,'int'):'—'}</div></div>
-       <div class="k"><div class="kl">AOV</div><div class="kv">${K.matched?numSpan(K.aov,'moneyC'):'—'}</div></div>
-       <div class="k"><div class="kl">Redemption</div><div class="kv">${K.matched?numSpan(K.redemption,'moneyC'):'—'}</div></div>
-       <div class="k"><div class="kl">Redeemed</div><div class="kv">${K.matched?numSpan(K.redeemed,'int'):'—'}</div></div>
+   <div class="kpis">
+     <div class="kpi hero">
+       <div class="kl">Paid GMV · ${scopeLabel}</div>
+       <div class="kv">${numSpan(K.gmv,'moneyC')}</div>
+       <div class="kcap">${heroCap}</div>
      </div>
+     <div class="kpi"><div class="kl">Orders</div><div class="kv">${K.matched?numSpan(K.orders,'int'):'—'}</div></div>
+     <div class="kpi"><div class="kl">AOV</div><div class="kv">${K.matched?numSpan(K.aov,'moneyC'):'—'}</div></div>
+     <div class="kpi"><div class="kl">Redemption</div><div class="kv">${K.matched?numSpan(K.redemption,'moneyC'):'—'}</div></div>
+     <div class="kpi"><div class="kl">Redeemed orders</div><div class="kv">${K.matched?numSpan(K.redeemed,'int'):'—'}</div></div>
    </div>
 
    <div class="mini-stats">
