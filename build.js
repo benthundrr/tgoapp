@@ -18,6 +18,7 @@ const OUT = path.join(__dirname, 'data.json');
 
 const norm = s => String(s == null ? '' : s).trim();
 const lc = s => norm(s).toLowerCase();
+const handle = s => lc(s).replace(/^@+/, '').replace(/\s+/g, ''); // canonical username key
 const mLabel = m => m ? `${m.slice(0, 4)}-${m.slice(4, 6)}` : '—';
 const num = v => { const n = parseFloat(v); return isFinite(n) ? n : 0; };
 const r2 = n => Math.round(n * 100) / 100;
@@ -64,7 +65,7 @@ function buildRoster() {
     cStatus = col(/status/i), cCity = col(/^city$/i), cState = col(/state/i),
     cWeb = col(/webinar/i), cDate = col(/^date$/i);
   for (let i = h + 1; i < rows.length; i++) {
-    const r = rows[i]; const u = lc(r[cUser]);
+    const r = rows[i]; const u = handle(r[cUser]);
     if (!u) continue;
     roster[u] = {
       username: norm(r[cUser]),
@@ -102,7 +103,7 @@ function buildSnapshots(profiles) {
     };
     const byUser = {};
     for (let i = 1; i < rows.length; i++) {
-      const r = rows[i]; const u = lc(r[I.id]); if (!u) continue;
+      const r = rows[i]; const u = handle(r[I.id]); if (!u) continue;
       byUser[u] = {
         sales: r2(num(r[I.sales])), orders: num(r[I.orders]),
         redemption: r2(num(r[I.redAmt])), redeemedOrders: num(r[I.redOrd]),
@@ -122,6 +123,7 @@ function buildSnapshots(profiles) {
 }
 
 /* ContentAnalysis → posts (dedup by Post ID across files, keep latest) */
+const EXCLUDE_MONTHS = ['202604']; // no April data — eliminate per request
 const VALID = p => p.views >= 300; // public/reached proxy (TikTok's true valid count adds POI-match + relevance, not in export)
 function indCode(s) {
   s = (s || '').toLowerCase();
@@ -147,7 +149,7 @@ function buildPosts(profiles) {
       cmt: idx(/Comment rate/i), ptype: idx(/Post type/i)
     };
     for (let i = 1; i < rows.length; i++) {
-      const r = rows[i]; const u = lc(r[I.cid]); const pid = norm(r[I.pid]);
+      const r = rows[i]; const u = handle(r[I.cid]); const pid = norm(r[I.pid]);
       if (!u || !pid) continue;
       profiles[u] = profiles[u] || {};
       if (!profiles[u].name) profiles[u].name = norm(r[I.cname]) || norm(r[I.cid]);
@@ -164,7 +166,7 @@ function buildPosts(profiles) {
       });
     }
   }
-  return [...map.values()].sort((a, b) => a.date.localeCompare(b.date));
+  return [...map.values()].filter(p => !EXCLUDE_MONTHS.includes(p.date.slice(0, 6))).sort((a, b) => a.date.localeCompare(b.date));
 }
 
 /* ACC / TTD: valid posts = current month; Paid GMV = cumulative (accrues) */
