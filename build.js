@@ -119,7 +119,14 @@ function buildSnapshots(profiles) {
     }
     snaps.push({ start, end, monthKey: (end || start).slice(0, 6), byUser });
   }
-  return snaps.sort((a, b) => (a.end || a.start).localeCompare(b.end || b.start));
+  // one snapshot per month — if duplicate-period files were uploaded (e.g. Jun 1-16 + Jun 1-17),
+  // keep only the most recent (latest end) so a month is never counted twice
+  const byMonth = {};
+  for (const s of snaps) {
+    const k = s.monthKey, cur = byMonth[k];
+    if (!cur || (s.end || s.start) > (cur.end || cur.start)) byMonth[k] = s;
+  }
+  return Object.values(byMonth).sort((a, b) => (a.end || a.start).localeCompare(b.end || b.start));
 }
 
 /* ContentAnalysis → posts (dedup by Post ID across files, keep latest) */

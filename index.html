@@ -632,8 +632,10 @@ const saveManaged=()=>localStorage.setItem(managedKey(),JSON.stringify([...MANAG
 const latestSnap=()=>DB.snapshots.at(-1)||{byUser:{}};
 const snapFor=u=>latestSnap().byUser[u]||null;
 function monthSnapGMV(u,mk){const s=DB.snapshots.find(s=>s.monthKey===mk);return s&&s.byUser[u]?s.byUser[u].sales:null;}
+function monthlySnaps(){const by={};for(const s of(DB.snapshots||[])){const k=s.monthKey,c=by[k];if(!c||(s.end||s.start)>(c.end||c.start))by[k]=s;}return Object.values(by);}
 function periodKPIs(scope){
-  const snaps = scope==='all' ? DB.snapshots.slice() : DB.snapshots.filter(x=>x.monthKey===scope);
+  const all=monthlySnaps();
+  const snaps = scope==='all' ? all : all.filter(x=>x.monthKey===scope);
   let gmv=0,orders=0,red=0,redO=0,views=0,start=null,end=null;const sellers=new Set();
   snaps.forEach(s=>{for(const u in s.byUser){const x=s.byUser[u];gmv+=x.sales||0;orders+=x.orders||0;red+=x.redemption||0;redO+=x.redeemedOrders||0;views+=x.views||0;if((x.sales||0)>0)sellers.add(u);}
     if(!start||s.start<start)start=s.start;const e=s.end||s.start;if(!end||e>end)end=e;});
