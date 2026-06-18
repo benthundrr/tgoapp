@@ -1,0 +1,1765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thundrr GO | Creator Introduction</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --orange: #ff5e00;
+      --orange-glow: rgba(255, 94, 0, 0.4);
+      --dark: #0a0a0a;
+      --card: #141414;
+      --card-border: rgba(255, 255, 255, 0.1);
+      --text: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.7);
+      --text-muted: rgba(255, 255, 255, 0.5);
+      --green: #22c55e;
+      --green-soft: rgba(34, 197, 94, 0.15);
+      --red: #ef4444;
+      --red-soft: rgba(239, 68, 68, 0.12);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* Background Grid + Particles */
+    .bg-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .grid-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+    }
+
+    .particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .particle {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: var(--orange);
+      border-radius: 50%;
+      opacity: 0;
+      animation: particleFloat 12s infinite ease-in-out;
+    }
+
+    @keyframes particleFloat {
+      0% {
+        opacity: 0;
+        transform: translateY(100vh) scale(0.5);
+      }
+      10% {
+        opacity: 0.6;
+      }
+      90% {
+        opacity: 0.6;
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-20vh) scale(1);
+      }
+    }
+
+    .glow-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.15;
+      animation: orbMove 20s infinite ease-in-out;
+    }
+
+    .glow-orb.orange {
+      width: 500px;
+      height: 500px;
+      background: var(--orange);
+      top: 15%;
+      right: -150px;
+    }
+
+    @keyframes orbMove {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(30px, -30px); }
+    }
+
+    /* Slideshow Container */
+    .slideshow {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    /* Individual Slide */
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 80px 60px 140px;
+      opacity: 0;
+      visibility: hidden;
+      overflow: hidden;
+      z-index: 0;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      z-index: 2;
+    }
+
+    .slide-inner {
+      max-width: 1000px;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInScale {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-60px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(60px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.5); }
+      70% { transform: scale(1.05); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes glowPulse {
+      0%, 100% { text-shadow: 0 0 40px var(--orange-glow); }
+      50% { text-shadow: 0 0 80px var(--orange-glow), 0 0 120px rgba(255, 94, 0, 0.2); }
+    }
+
+    .slide.active .anim-1 { animation: fadeInUp 0.6s ease forwards 0.1s; opacity: 0; }
+    .slide.active .anim-2 { animation: fadeInUp 0.6s ease forwards 0.2s; opacity: 0; }
+    .slide.active .anim-3 { animation: fadeInUp 0.6s ease forwards 0.35s; opacity: 0; }
+    .slide.active .anim-4 { animation: fadeInUp 0.6s ease forwards 0.5s; opacity: 0; }
+    .slide.active .anim-5 { animation: fadeInUp 0.6s ease forwards 0.65s; opacity: 0; }
+    .slide.active .anim-pop { animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 0.25s; opacity: 0; }
+    .slide.active .anim-scale { animation: fadeInScale 0.7s ease forwards 0.2s; opacity: 0; }
+    .slide.active .anim-left { animation: slideInLeft 0.6s ease forwards; opacity: 0; }
+    .slide.active .anim-right { animation: slideInRight 0.6s ease forwards; opacity: 0; }
+    .slide.active .anim-glow { animation: glowPulse 2.5s ease-in-out infinite 0.8s; }
+
+    /* Ensure anim children on inactive slides stay hidden */
+    .slide:not(.active) .anim-1,
+    .slide:not(.active) .anim-2,
+    .slide:not(.active) .anim-3,
+    .slide:not(.active) .anim-4,
+    .slide:not(.active) .anim-5,
+    .slide:not(.active) .anim-pop,
+    .slide:not(.active) .anim-scale,
+    .slide:not(.active) .anim-left,
+    .slide:not(.active) .anim-right {
+      opacity: 0 !important;
+      animation: none !important;
+    }
+
+    /* Typography */
+    .slide-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 20px;
+    }
+
+    .slide-title {
+      font-size: clamp(32px, 5vw, 56px);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 20px;
+      letter-spacing: -0.5px;
+    }
+
+    .slide-title span { color: var(--orange); }
+
+    .slide-subtitle {
+      font-size: clamp(16px, 2vw, 20px);
+      color: var(--text-secondary);
+      font-weight: 400;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Big Number */
+    .big-number {
+      font-size: clamp(72px, 12vw, 120px);
+      font-weight: 900;
+      color: var(--orange);
+      line-height: 1;
+      margin: 16px 0;
+    }
+
+    .big-label {
+      font-size: clamp(16px, 2vw, 22px);
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    /* Stat Row */
+    .stat-row {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--orange);
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Cards Grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 36px;
+      text-align: left;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 24px;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: var(--orange);
+    }
+
+    .card-icon { font-size: 28px; margin-bottom: 14px; }
+    .card-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .card-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+
+    /* Flow Diagram */
+    .flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 40px;
+    }
+
+    .flow-step {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 16px 22px;
+      text-align: center;
+      min-width: 110px;
+    }
+
+    .flow-step.highlight {
+      background: var(--orange);
+      border-color: var(--orange);
+    }
+
+    .flow-icon { font-size: 24px; margin-bottom: 8px; }
+    .flow-label { font-size: 13px; font-weight: 600; }
+    .flow-arrow { font-size: 20px; color: var(--orange); }
+
+    /* Tag Comparison */
+    .tag-compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 36px;
+      max-width: 550px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .tag-box {
+      border-radius: 16px;
+      padding: 28px 20px;
+      text-align: center;
+    }
+
+    .tag-box.good {
+      background: var(--green-soft);
+      border: 2px solid var(--green);
+    }
+
+    .tag-box.bad {
+      background: var(--red-soft);
+      border: 2px solid var(--red);
+    }
+
+    .tag-emoji { font-size: 40px; margin-bottom: 12px; }
+    .tag-name { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+    .tag-box.good .tag-name { color: var(--green); }
+    .tag-box.bad .tag-name { color: var(--red); }
+    .tag-status { font-size: 13px; color: var(--text-muted); }
+
+    /* Method Cards */
+    .methods-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 36px;
+      text-align: left;
+    }
+
+    @media (max-width: 600px) {
+      .methods-grid { grid-template-columns: 1fr; }
+    }
+
+    .method-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 22px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .method-num {
+      width: 36px;
+      height: 36px;
+      background: var(--orange);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .method-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+    .method-desc { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+    /* Steps List */
+    .steps-compact {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 20px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .step-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 14px 18px;
+      text-align: left;
+    }
+
+    .step-num {
+      width: 32px;
+      height: 32px;
+      background: rgba(255, 94, 0, 0.15);
+      color: var(--orange);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .step-text { font-size: 14px; font-weight: 500; }
+    .step-sub { font-size: 12px; color: var(--text-muted); }
+
+    /* Path Box */
+    .path-box {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px 28px;
+      margin-top: 20px;
+      display: inline-block;
+    }
+
+    .path-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .path-text .arrow {
+      color: var(--orange);
+      margin: 0 8px;
+    }
+
+    /* Checklist */
+    .checklist {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 32px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
+    }
+
+    @media (max-width: 600px) {
+      .checklist { grid-template-columns: 1fr; }
+    }
+
+    .check-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .check-icon {
+      width: 24px;
+      height: 24px;
+      background: var(--green);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    /* Charts */
+    .chart-container {
+      margin-top: 32px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .chart-wrapper {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    .chart-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .bar-chart {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .bar-label {
+      font-size: 13px;
+      font-weight: 600;
+      width: 90px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .bar-track {
+      flex: 1;
+      height: 28px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 6px;
+      transition: width 1s ease;
+    }
+
+    .bar-fill.shop {
+      background: linear-gradient(90deg, #666, #888);
+    }
+
+    .bar-fill.go {
+      background: linear-gradient(90deg, var(--orange), #ff8533);
+      animation: barGrow 1.2s ease forwards;
+      animation-delay: 0.5s;
+    }
+
+    @keyframes barGrow {
+      from { width: 0; }
+    }
+
+    .bar-value {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      width: 50px;
+      flex-shrink: 0;
+    }
+
+    /* Timeline */
+    .timeline-container {
+      margin-top: 28px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .timeline-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+    }
+
+    .timeline-items {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      padding: 0 10px;
+    }
+
+    .timeline-items::before {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 30px;
+      right: 30px;
+      height: 2px;
+      background: var(--card-border);
+    }
+
+    .timeline-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .timeline-dot {
+      width: 18px;
+      height: 18px;
+      background: var(--card);
+      border: 3px solid var(--card-border);
+      border-radius: 50%;
+      margin-bottom: 10px;
+    }
+
+    .timeline-item.now .timeline-dot {
+      background: var(--orange);
+      border-color: var(--orange);
+      box-shadow: 0 0 12px var(--orange-glow);
+    }
+
+    .timeline-item:not(.future):not(.now) .timeline-dot {
+      background: var(--green);
+      border-color: var(--green);
+    }
+
+    .timeline-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .timeline-item.now .timeline-label {
+      color: var(--orange);
+    }
+
+    .timeline-content {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-align: center;
+      max-width: 70px;
+    }
+
+    .timeline-item.future .timeline-content {
+      color: var(--text-muted);
+    }
+
+    /* Priority Callout */
+    .priority-callout {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 28px;
+      padding: 18px 28px;
+      background: rgba(255, 94, 0, 0.1);
+      border: 1px solid rgba(255, 94, 0, 0.25);
+      border-radius: 12px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .priority-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .priority-text {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .priority-text strong {
+      color: var(--orange);
+      font-weight: 700;
+    }
+
+    /* Week Steps */
+    .week-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 36px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .week-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 20px 24px;
+      text-align: left;
+      transition: border-color 0.3s ease;
+    }
+
+    .week-step:hover {
+      border-color: var(--orange);
+    }
+
+    .week-num {
+      width: 44px;
+      height: 44px;
+      background: var(--orange);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .week-content {
+      flex: 1;
+    }
+
+    .week-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .week-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Navigation */
+    .nav {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(20, 20, 20, 0.95);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: 50px;
+      padding: 10px 20px;
+      z-index: 100;
+    }
+
+    .nav-btn {
+      width: 44px;
+      height: 44px;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--text);
+      font-size: 18px;
+    }
+
+    .nav-btn:hover { background: var(--orange); border-color: var(--orange); }
+    .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .nav-btn:disabled:hover { background: var(--card); border-color: var(--card-border); }
+
+    .nav-dots { display: flex; gap: 6px; }
+
+    .nav-dot {
+      width: 8px;
+      height: 8px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .nav-dot.active {
+      background: var(--orange);
+      width: 24px;
+      border-radius: 4px;
+    }
+
+    .nav-dot:hover:not(.active) { background: rgba(255,255,255,0.4); }
+
+    /* Progress Bar */
+    .progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: var(--orange);
+      transition: width 0.3s ease;
+      z-index: 101;
+    }
+
+    /* Logo */
+    .logo {
+      position: fixed;
+      top: 24px;
+      left: 32px;
+      font-size: 16px;
+      font-weight: 800;
+      z-index: 100;
+    }
+
+    .logo span { color: var(--orange); }
+
+    /* Slide Counter */
+    .counter {
+      position: fixed;
+      top: 24px;
+      right: 32px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      z-index: 100;
+    }
+
+    .counter span { color: var(--text); }
+
+    /* Responsive */
+    @media (max-width: 700px) {
+      .slide { padding: 70px 24px 130px; }
+      .logo { top: 16px; left: 16px; font-size: 13px; }
+      .counter { top: 16px; right: 16px; font-size: 11px; }
+      .nav { bottom: 16px; padding: 8px 14px; gap: 10px; }
+      .nav-btn { width: 38px; height: 38px; font-size: 16px; }
+      .cards-grid { grid-template-columns: 1fr; }
+      .flow { flex-direction: column; }
+      .flow-arrow { transform: rotate(90deg); }
+      .tag-compare { grid-template-columns: 1fr; gap: 12px; }
+    }
+
+    /* ── Community / Media Kit / Incentives ── */
+    .discord-board {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin: 32px auto 0;
+      max-width: 760px;
+      text-align: left;
+    }
+    .dc-group {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 16px 18px;
+    }
+    .dc-cat {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 11px;
+    }
+    .dc-channel {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      padding: 4px 0;
+      flex-wrap: wrap;
+    }
+    .dc-hash { color: var(--orange); font-weight: 800; font-size: 13px; }
+    .dc-name { font-size: 13px; font-weight: 600; }
+    .dc-purpose { font-size: 11px; color: var(--text-muted); }
+    @media (max-width: 600px) { .discord-board { grid-template-columns: 1fr; max-width: 360px; } }
+
+    /* Media kit previews */
+    .mk-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin: 20px auto 0;
+      max-width: 620px;
+    }
+    .mk-card { display: flex; flex-direction: column; text-align: center; }
+    .mk-preview {
+      aspect-ratio: 4 / 5;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      overflow: hidden;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .mk-label { font-size: 14px; font-weight: 800; margin-top: 12px; }
+    .mk-desc { font-size: 11px; color: var(--text-muted); margin-top: 3px; line-height: 1.4; }
+    @media (max-width: 700px) { .mk-grid { grid-template-columns: 1fr; max-width: 240px; } }
+
+    /* Incentives */
+    .inc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 28px auto 0;
+      max-width: 760px;
+      text-align: left;
+    }
+    .inc-card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 22px;
+    }
+    .inc-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .inc-icon { font-size: 26px; flex-shrink: 0; }
+    .inc-name { font-size: 16px; font-weight: 800; }
+    .inc-amt { font-size: 13px; color: var(--orange); font-weight: 700; margin-top: 2px; }
+    .inc-desc { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; }
+    .inc-tiers { display: flex; gap: 8px; margin-top: 16px; }
+    .inc-tier {
+      flex: 1;
+      text-align: center;
+      background: rgba(255, 94, 0, 0.08);
+      border: 1px solid rgba(255, 94, 0, 0.22);
+      border-radius: 10px;
+      padding: 10px 4px;
+    }
+    .inc-tier-amt { font-size: 17px; font-weight: 800; color: var(--orange); }
+    .inc-tier-goal { font-size: 10px; color: var(--text-muted); margin-top: 2px; }
+    @media (max-width: 600px) { .inc-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <!-- Background -->
+  <div class="bg-container">
+    <div class="grid-bg"></div>
+    <div class="particles" id="particles"></div>
+    <div class="glow-orb orange"></div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="progress" id="progress"></div>
+
+  <!-- Logo -->
+  <div class="logo">THUNDRR <span>GO</span></div>
+
+  <!-- Counter -->
+  <div class="counter"><span id="currentSlide">1</span> / <span id="totalSlides">18</span></div>
+
+  <!-- Slideshow -->
+  <div class="slideshow">
+
+    <!-- Slide 1: Welcome -->
+    <div class="slide active" data-slide="1">
+      <div class="slide-inner">
+        <p class="slide-tag anim-1">Creator Introduction</p>
+        <h1 class="slide-title anim-2">Welcome to<br><span>Thundrr GO</span></h1>
+        <p class="slide-subtitle anim-3">Your partner for earning on TikTok's travel affiliate program. Let's get you set up.</p>
+      </div>
+    </div>
+
+    <!-- Slide 2: What is TikTok GO -->
+    <div class="slide" data-slide="2">
+      <div class="slide-inner">
+        <p class="slide-tag anim-1">The Basics</p>
+        <h1 class="slide-title anim-2">What is <span>TikTok GO</span>?</h1>
+        <p class="slide-subtitle anim-3">TikTok Shop for travel. Create content about hotels and experiences — viewers book through your video, you earn commission.</p>
+        <div class="flow anim-4">
+          <div class="flow-step">
+            <div class="flow-icon">🎬</div>
+            <div class="flow-label">You Post</div>
+          </div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step">
+            <div class="flow-icon">👀</div>
+            <div class="flow-label">They Watch</div>
+          </div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step">
+            <div class="flow-icon">🏨</div>
+            <div class="flow-label">They Book</div>
+          </div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step highlight">
+            <div class="flow-icon">💰</div>
+            <div class="flow-label">You Earn</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Industry Overview -->
+    <div class="slide" data-slide="3">
+      <div class="slide-inner">
+        <p class="slide-tag anim-1">The Opportunity</p>
+        <h1 class="slide-title anim-2">We're <span>Early</span></h1>
+        <p class="slide-subtitle anim-3">TikTok GO is where TikTok Shop was in 2022. Ground floor opportunity.</p>
+        
+        <div class="chart-container anim-4">
+          <div class="chart-wrapper">
+            <div class="chart-title">Program Maturity</div>
+            <div class="bar-chart">
+              <div class="bar-row">
+                <span class="bar-label">TikTok Shop</span>
+                <div class="bar-track">
+                  <div class="bar-fill shop" style="width: 85%;"></div>
+                </div>
+                <span class="bar-value">Mature</span>
+              </div>
+              <div class="bar-row">
+                <span class="bar-label">TikTok GO</span>
+                <div class="bar-track">
+                  <div class="bar-fill go" style="width: 15%;"></div>
+                </div>
+                <span class="bar-value">Early</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-container anim-5">
+          <div class="timeline-title">What's Coming to TikTok GO</div>
+          <div class="timeline-items">
+            <div class="timeline-item now">
+              <div class="timeline-dot"></div>
+              <div class="timeline-label">Now</div>
+              <div class="timeline-content">Hotels & Stays</div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-label">Live</div>
+              <div class="timeline-content">Things to Do (Viator)</div>
+            </div>
+            <div class="timeline-item future">
+              <div class="timeline-dot"></div>
+              <div class="timeline-label">Coming</div>
+              <div class="timeline-content">Restaurants</div>
+            </div>
+            <div class="timeline-item future">
+              <div class="timeline-dot"></div>
+              <div class="timeline-label">Coming</div>
+              <div class="timeline-content">Med Spas & Wellness</div>
+            </div>
+            <div class="timeline-item future">
+              <div class="timeline-dot"></div>
+              <div class="timeline-label">Coming</div>
+              <div class="timeline-content">Local Services</div>
+            </div>
+          </div>
+        </div>
+
+        <p class="slide-subtitle anim-3" style="margin-top: 28px; font-size: 14px; color: var(--text-muted);">Most hotels don't even know this program exists yet. Early creators win.</p>
+      </div>
+    </div>
+
+    <!-- Slide 4: Commission -->
+    <div class="slide" data-slide="4">
+      <div class="slide-inner">
+        <p class="slide-tag anim-1">Your Earnings</p>
+        <h1 class="slide-title anim-2">You Keep <span>100%</span></h1>
+        <p class="slide-subtitle anim-3">TikTok pays you directly. We don't take a cut.</p>
+        <div class="stat-row anim-4" style="margin-top: 40px;">
+          <div class="stat-item">
+            <div class="stat-value" style="font-size: 28px; line-height: 1.2;">Dynamic</div>
+            <div class="stat-label">commission rate per booking</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" style="font-size: 28px; line-height: 1.2;">Varies</div>
+            <div class="stat-label">by POI, season &amp; demand</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">0%</div>
+            <div class="stat-label">agency cut — you keep it all</div>
+          </div>
+        </div>
+        <div class="anim-5" style="margin-top: 28px; background: rgba(255,94,0,0.08); border: 1px solid rgba(255,94,0,0.25); border-radius: 12px; padding: 14px 20px; display: flex; align-items: center; gap: 12px; font-size: 13px; color: rgba(255,255,255,0.85);">
+          <span style="font-size: 18px;">🔒</span>
+          <span>Rates are <strong style="color: var(--orange);">dynamic</strong> — they shift based on demand, seasonality &amp; platform strategy. Your rate <strong style="color: var(--orange);">locks the moment you publish</strong>. Check what a POI pays before you post. <span style="opacity: 0.7;">→ Next slide: the 180-day rule explained.</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 5: 180-Day Rule -->
+    <div class="slide" data-slide="5">
+      <div class="slide-inner">
+        <p class="slide-tag anim-1">📋 Policy Update</p>
+        <h1 class="slide-title anim-2">The <span>180-Day</span> Rule</h1>
+        <p class="slide-subtitle anim-3">Only applies to "Collaboration For You" brand deals. Regular content stays evergreen.</p>
+
+        <div class="anim-4" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-top: 24px;">
+
+          <!-- Affected -->
+          <div style="background: rgba(251,191,36,0.06); border: 1px solid rgba(251,191,36,0.3); border-top: 3px solid #FBBF24; border-radius: 12px; padding: 16px 14px; display: flex; flex-direction: column; gap: 8px; text-align: left;">
+            <div style="font-size: 10px; font-weight: 700; letter-spacing: 0.08em; color: #FBBF24; text-transform: uppercase;">⚠ What IS Affected</div>
+            <div style="font-size: 12px; font-weight: 700; color: #FBBF24; background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.2); border-radius: 6px; padding: 6px 10px;">"Collaboration For You"</div>
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 6px; margin: 0; padding: 0;">
+              <li style="display: flex; gap: 6px; align-items: flex-start; font-size: 11.5px; color: rgba(255,255,255,0.75);"><span style="color: #FBBF24; flex-shrink: 0;">★</span><span>Exclusive paid brand deals inside Creator Center</span></li>
+              <li style="display: flex; gap: 6px; align-items: flex-start; font-size: 11.5px; color: rgba(255,255,255,0.75);"><span style="color: #FBBF24; flex-shrink: 0;">★</span><span>Booking.com &amp; external brand sponsorships</span></li>
+              <li style="display: flex; gap: 6px; align-items: flex-start; font-size: 11.5px; color: rgba(255,255,255,0.75);"><span style="color: #FBBF24; flex-shrink: 0;">★</span><span>Orders must be within <strong style="color:#FBBF24;">180 days</strong> of your post date</span></li>
+            </ul>
+          </div>
+
+          <!-- Not Affected -->
+          <div style="background: rgba(34,197,94,0.06); border: 1px solid rgba(34,197,94,0.25); border-top: 3px solid #22c55e; border-radius: 12px; padding: 16px 14px; display: flex; flex-direction: column; gap: 8px; text-align: left;">
+            <div style="font-size: 10px; font-weight: 700; letter-spacing: 0.08em; color: #22c55e; text-transform: uppercase;">✅ What's NOT Affected</div>
+            <div style="font-size: 12px; font-weight: 700; color: #22c55e; background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.2); border-radius: 6px; padding: 6px 10px;">Regular TTGO Content</div>
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 6px; margin: 0; padding: 0;">
+              <li style="display: flex; gap: 6px; align-items: flex-start; font-size: 11.5px; color: rgba(255,255,255,0.75);"><span style="color: #22c55e; flex-shrink: 0;">✓</span><span>Tasks &amp; leaderboard posts — <strong style="color:#4ADE80;">fully evergreen</strong></span></li>
+              <li style="display: flex; gap: 6px; align-items: flex-start; font-size: 11.5px; color: rgba(255,255,255,0.75);"><span style="color: #22c55e; flex-shrink: 0;">✓</span><span>Editing a post does <strong style="color:#4ADE80;">not</strong> reset the 180-day timer</span></li>
+              <li style="display: flex; gap: 6px; align-items: flex-start; font-size: 11.5px; color: rgba(255,255,255,0.75);"><span style="color: #22c55e; flex-shrink: 0;">✓</span><span>Only ~1% of GMV comes from posts older than 180 days</span></li>
+            </ul>
+          </div>
+
+          <!-- Dynamic Rates -->
+          <div style="background: rgba(255,94,0,0.06); border: 1px solid rgba(255,94,0,0.25); border-top: 3px solid var(--orange); border-radius: 12px; padding: 16px 14px; display: flex; flex-direction: column; gap: 8px; text-align: left;">
+            <div style="font-size: 10px; font-weight: 700; letter-spacing: 0.08em; color: var(--orange); text-transform: uppercase;">🔒 Dynamic Rates</div>
+            <div style="font-size: 12px; font-weight: 700; color: var(--orange); background: rgba(255,94,0,0.08); border: 1px solid rgba(255,94,0,0.2); border-radius: 6px; padding: 6px 10px;">New Since May 11, 2026</div>
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 6px; margin: 0; padding: 0;">
+              <li style="display: flex; gap: 6px; align-items: flex-start; font-size: 11.5px; color: rgba(255,255,255,0.75);"><span style="color: var(--orange); flex-shrink: 0;">✓</span><span>Rate <strong style="color:var(--orange);">locks at publish</strong> — what you see = what you earn</span></li>
+              <li style="display: flex; gap: 6px; align-items: flex-start; font-size: 11.5px; color: rgba(255,255,255,0.75);"><span style="color: var(--orange); flex-shrink: 0;">✓</span><span>Old posts keep their rate even if POI rate drops</span></li>
+              <li style="display: flex; gap: 6px; align-items: flex-start; font-size: 11.5px; color: rgba(255,255,255,0.75);"><span style="color: var(--orange); flex-shrink: 0;">✓</span><span>New post = fresh window + new locked rate</span></li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="anim-5" style="margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+          <div style="background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); border-radius: 20px; padding: 5px 14px; font-size: 11px; font-weight: 600; color: #4ADE80;">✓ Old posts still earn</div>
+          <div style="background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.3); border-radius: 20px; padding: 5px 14px; font-size: 11px; font-weight: 600; color: #a5b4fc;">✓ Editing doesn't reset timer</div>
+          <div style="background: rgba(255,94,0,0.1); border: 1px solid rgba(255,94,0,0.3); border-radius: 20px; padding: 5px 14px; font-size: 11px; font-weight: 600; color: var(--orange);">★ New post = fresh window + locked rate</div>
+          <div style="background: rgba(251,191,36,0.1); border: 1px solid rgba(251,191,36,0.3); border-radius: 20px; padding: 5px 14px; font-size: 11px; font-weight: 600; color: #FBBF24;">⚠ 180-day window: Collab For You ONLY</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 5: How to Access TikTok GO -->
+    <div class="slide" data-slide="6">
+      <div class="slide-inner">
+        <p class="slide-tag anim-1">Step by Step</p>
+        <h1 class="slide-title anim-2">Finding <span>TikTok GO</span></h1>
+        <p class="slide-subtitle anim-3">Follow this exact path inside the app.</p>
+        <div class="path-box anim-4">
+          <span class="path-text">Profile <span class="arrow">→</span> Menu (☰) <span class="arrow">→</span> TikTok Studio <span class="arrow">→</span> TikTok GO</span>
+        </div>
+        <div class="steps-compact anim-5">
+          <div class="step-row">
+            <span class="step-num">1</span>
+            <div>
+              <div class="step-text">Open Marketplace</div>
+              <div class="step-sub">Browse hotels and experiences in your area</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <span class="step-num">2</span>
+            <div>
+              <div class="step-text">Search Location</div>
+              <div class="step-sub">Find the exact property you want to post about</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <span class="step-num">3</span>
+            <div>
+              <div class="step-text">Check Commission</div>
+              <div class="step-sub">See what you'll earn before committing</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <span class="step-num">4</span>
+            <div>
+              <div class="step-text">Tap "Post Content"</div>
+              <div class="step-sub">GREEN tag auto-attaches — upload your video</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 7: Get Paid to Just Post -->
+    <div class="slide" data-slide="7">
+      <div class="slide-inner">
+        <p class="slide-tag anim-1">Tasks &amp; Rewards</p>
+        <h1 class="slide-title anim-2">Get Paid to <span>Just Post</span></h1>
+        <p class="slide-subtitle anim-3">Two reward systems run side by side. Use both on the same post and you <strong style="color:var(--orange);">double dip</strong>.</p>
+        <div class="path-box anim-4">
+          <span class="path-text">TikTok GO <span class="arrow">&rarr;</span> Tasks with Rewards <span class="arrow">&rarr;</span> Join Leaderboards &#127942; + Open a Task &#11088;</span>
+        </div>
+        <div class="anim-5" style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:24px; text-align:left; max-width:780px; margin-left:auto; margin-right:auto;">
+          <!-- Crown / Leaderboard -->
+          <div style="background:rgba(255,94,0,0.06); border:1px solid rgba(255,94,0,0.25); border-top:3px solid var(--orange); border-radius:14px; padding:20px;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+              <span style="font-size:24px;">&#127942;</span>
+              <div>
+                <div style="font-size:15px; font-weight:800;">Leaderboard Tasks</div>
+                <div style="font-size:10.5px; color:var(--orange); font-weight:700; text-transform:uppercase; letter-spacing:0.05em;">Crown Icon &middot; Join ALL</div>
+              </div>
+            </div>
+            <ul style="list-style:none; display:flex; flex-direction:column; gap:9px; margin:0; padding:0;">
+              <li style="display:flex; gap:8px; font-size:12.5px; color:var(--text-secondary); line-height:1.45;"><span style="color:var(--orange);">&#10003;</span><span>Join <strong>every</strong> leaderboard &mdash; both GMV and Post leaderboards.</span></li>
+              <li style="display:flex; gap:8px; font-size:12.5px; color:var(--text-secondary); line-height:1.45;"><span style="color:var(--orange);">&#10003;</span><span>Open each, read the requirements, and <strong>remember the hashtag</strong>.</span></li>
+              <li style="display:flex; gap:8px; font-size:12.5px; color:var(--text-secondary); line-height:1.45;"><span style="color:var(--red);">&#10007;</span><span><strong style="color:var(--red);">Do not post here</strong> &mdash; this only enters you in the standings.</span></li>
+            </ul>
+          </div>
+          <!-- Star / Task -->
+          <div style="background:rgba(34,197,94,0.06); border:1px solid rgba(34,197,94,0.25); border-top:3px solid var(--green); border-radius:14px; padding:20px;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+              <span style="font-size:24px;">&#11088;</span>
+              <div>
+                <div style="font-size:15px; font-weight:800;">Posting Tasks</div>
+                <div style="font-size:10.5px; color:var(--green); font-weight:700; text-transform:uppercase; letter-spacing:0.05em;">Star Icon &middot; Post Here</div>
+              </div>
+            </div>
+            <ul style="list-style:none; display:flex; flex-direction:column; gap:9px; margin:0; padding:0;">
+              <li style="display:flex; gap:8px; font-size:12.5px; color:var(--text-secondary); line-height:1.45;"><span style="color:var(--green);">&#10003;</span><span>Read requirements, then <strong>select an approved location</strong> (auto-fills if approved).</span></li>
+              <li style="display:flex; gap:8px; font-size:12.5px; color:var(--text-secondary); line-height:1.45;"><span style="color:var(--green);">&#10003;</span><span>Make the <strong>leaderboard hashtag your first hashtag</strong> in the description.</span></li>
+              <li style="display:flex; gap:8px; font-size:12.5px; color:var(--text-secondary); line-height:1.45;"><span style="color:var(--green);">&#10003;</span><span>Meet the Qualified Content guidelines (next slide).</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="priority-callout anim-5" style="margin-top:18px;">
+          <span class="priority-icon">&#128176;</span>
+          <span class="priority-text"><strong>Double dip:</strong> one qualifying post can earn from the <strong>Star task</strong> AND climb the <strong>Crown leaderboard</strong> at the same time.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 8: Make It Qualified -->
+    <div class="slide" data-slide="8">
+      <div class="slide-inner">
+        <p class="slide-tag anim-1">The Standard</p>
+        <h1 class="slide-title anim-2">Make It <span>Qualified</span></h1>
+        <p class="slide-subtitle anim-3">Qualified Content is the baseline for TikTok GO &mdash; hit it and you get more reach, more views, and more consistent earnings.</p>
+        <div class="anim-4" style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:24px; text-align:left; max-width:840px; margin-left:auto; margin-right:auto;">
+          <!-- Qualified checklist -->
+          <div style="background:var(--card); border:1px solid var(--card-border); border-radius:14px; padding:20px;">
+            <div style="font-size:11px; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:var(--orange); margin-bottom:14px;">&#10003; 3 Keys to Qualified Content</div>
+            <div style="display:flex; flex-direction:column; gap:13px;">
+              <div style="display:flex; gap:12px;">
+                <span class="method-num" style="width:30px; height:30px; font-size:14px;">1</span>
+                <div>
+                  <div style="font-size:13.5px; font-weight:700;">Meet Post Requirements</div>
+                  <div style="font-size:11.5px; color:var(--text-muted); line-height:1.5;">Follow community guidelines, the location content policy, and post about an approved place.</div>
+                </div>
+              </div>
+              <div style="display:flex; gap:12px;">
+                <span class="method-num" style="width:30px; height:30px; font-size:14px;">2</span>
+                <div>
+                  <div style="font-size:13.5px; font-weight:700;">Show Relevant Visuals</div>
+                  <div style="font-size:11.5px; color:var(--text-muted); line-height:1.5;">Make the place obvious &mdash; Stays: room &amp; amenities &middot; TTD: scenery, rides &amp; activities &middot; Restaurants: food, drinks &amp; interior.</div>
+                </div>
+              </div>
+              <div style="display:flex; gap:12px;">
+                <span class="method-num" style="width:30px; height:30px; font-size:14px;">3</span>
+                <div>
+                  <div style="font-size:13.5px; font-weight:700;">Be Authentic</div>
+                  <div style="font-size:11.5px; color:var(--text-muted); line-height:1.5;">Show yourself there in person, mix up your angles &amp; shots, and get creative with trending styles &amp; POV.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Hook / CTA -->
+          <div style="background:var(--card); border:1px solid var(--card-border); border-radius:14px; padding:20px;">
+            <div style="font-size:11px; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:var(--orange); margin-bottom:14px;">&#127907; Hook &apos;Em &amp; Convert</div>
+            <ul style="list-style:none; display:flex; flex-direction:column; gap:12px; margin:0; padding:0;">
+              <li style="display:flex; gap:12px; font-size:12.5px; color:var(--text-secondary); line-height:1.45;"><span style="color:var(--orange); font-weight:800; flex-shrink:0; width:38px;">0&ndash;1s</span><span><strong>Hook fast.</strong> Bonus: stack all three &mdash; audio, visual &amp; text.</span></li>
+              <li style="display:flex; gap:12px; font-size:12.5px; color:var(--text-secondary); line-height:1.45;"><span style="color:var(--orange); font-weight:800; flex-shrink:0; width:38px;">Then</span><span><strong>Name a pain point</strong> your viewer feels.</span></li>
+              <li style="display:flex; gap:12px; font-size:12.5px; color:var(--text-secondary); line-height:1.45;"><span style="color:var(--orange); font-weight:800; flex-shrink:0; width:38px;">5&ndash;7s</span><span><strong>Call to action</strong> &mdash; &ldquo;Click the green location tag below to save $X.XX.&rdquo;</span></li>
+              <li style="display:flex; gap:12px; font-size:12.5px; color:var(--text-secondary); line-height:1.45;"><span style="color:var(--orange); font-weight:800; flex-shrink:0; width:38px;">End</span><span><strong>Re-engage the CTA</strong> once more before they scroll.</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="priority-callout anim-5" style="margin-top:18px;">
+          <span class="priority-icon">&#128257;</span>
+          <span class="priority-text"><strong>Post consistently, post often.</strong> Volume plus Qualified Content is what compounds your earnings.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 6: Green Tag Rule -->
+    <div class="slide" data-slide="9">
+      <div class="slide-inner">
+        <p class="slide-tag anim-1">Important</p>
+        <h1 class="slide-title anim-2">The <span>GREEN</span> Tag</h1>
+        <p class="slide-subtitle anim-3">Your video must have a GREEN location tag to earn. White tag = $0.</p>
+        <div class="tag-compare">
+          <div class="tag-box good anim-left" style="animation-delay: 0.35s;">
+            <div class="tag-emoji">📍</div>
+            <div class="tag-name">GREEN Tag</div>
+            <div class="tag-status">✓ Earns Commission</div>
+          </div>
+          <div class="tag-box bad anim-right" style="animation-delay: 0.45s;">
+            <div class="tag-emoji">📍</div>
+            <div class="tag-name">WHITE Tag</div>
+            <div class="tag-status">✗ Earns Nothing</div>
+          </div>
+        </div>
+        <p class="slide-subtitle anim-5" style="margin-top: 28px; font-size: 15px;">Post from the Marketplace to auto-attach the green tag every time.</p>
+      </div>
+    </div>
+
+    <!-- Slide 7: Free Filming Methods -->
+    <div class="slide" data-slide="10">
+      <div class="slide-inner">
+        <p class="slide-tag anim-1">No Room Needed</p>
+        <h1 class="slide-title anim-2">Film for <span>FREE</span></h1>
+        <p class="slide-subtitle anim-3">You don't need to book a room to create commission-eligible content.</p>
+        <div class="methods-grid">
+          <div class="method-card anim-1" style="animation-delay: 0.25s;">
+            <span class="method-num">1</span>
+            <div>
+              <div class="method-title">Hotel Public Areas</div>
+              <div class="method-desc">Lobbies, rooftop bars, restaurants are open to the public. Order a drink and film.</div>
+            </div>
+          </div>
+          <div class="method-card anim-2" style="animation-delay: 0.35s;">
+            <span class="method-num">2</span>
+            <div>
+              <div class="method-title">Day Passes</div>
+              <div class="method-desc">ResortPass, DayAxe — pool and spa access for $25-75. Content worth hundreds.</div>
+            </div>
+          </div>
+          <div class="method-card anim-3" style="animation-delay: 0.45s;">
+            <span class="method-num">3</span>
+            <div>
+              <div class="method-title">TTD Preview Content</div>
+              <div class="method-desc">Film exteriors, entrances, nearby viewpoints of experiences and attractions.</div>
+            </div>
+          </div>
+          <div class="method-card anim-4" style="animation-delay: 0.55s;">
+            <span class="method-num">4</span>
+            <div>
+              <div class="method-title">Repurpose Old Trips</div>
+              <div class="method-desc">Search Marketplace for past trip locations. Edit with trending sounds and post.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 8: Why Thundrr -->
+    <div class="slide" data-slide="11">
+      <div class="slide-inner">
+        <p class="slide-tag anim-1">Your Advantage</p>
+        <h1 class="slide-title anim-2">Why <span>Thundrr GO</span>?</h1>
+        <div class="cards-grid">
+          <div class="card anim-1" style="animation-delay: 0.25s;">
+            <div class="card-icon">🎯</div>
+            <div class="card-title">Official TikTok Partner</div>
+            <div class="card-desc">TSP, CAP, and TAP partner with direct TikTok relationships.</div>
+          </div>
+          <div class="card anim-2" style="animation-delay: 0.35s;">
+            <div class="card-icon">🏨</div>
+            <div class="card-title">Hotel Partnerships</div>
+            <div class="card-desc">Access to hosted stays and POI visits beyond the Marketplace.</div>
+          </div>
+          <div class="card anim-3" style="animation-delay: 0.45s;">
+            <div class="card-icon">📚</div>
+            <div class="card-title">Training & Guides</div>
+            <div class="card-desc">Content strategies, filming tips, and optimization playbooks.</div>
+          </div>
+          <div class="card anim-4" style="animation-delay: 0.55s;">
+            <div class="card-icon">💬</div>
+            <div class="card-title">Direct Support</div>
+            <div class="card-desc">Dedicated Creator Manager and Discord community.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 9: Hotel Trips -->
+    <div class="slide" data-slide="12">
+      <div class="slide-inner">
+        <p class="slide-tag anim-1">Opportunities</p>
+        <h1 class="slide-title anim-2">Hotel <span>Content Days</span></h1>
+        <p class="slide-subtitle anim-3">We organize visits to hotels and POIs. You show up, film, and earn.</p>
+        <div class="cards-grid" style="max-width: 750px; margin: 32px auto 0; grid-template-columns: repeat(3, 1fr);">
+          <div class="card anim-1" style="animation-delay: 0.3s;">
+            <div class="card-icon">🛏️</div>
+            <div class="card-title">Hosted Stays</div>
+            <div class="card-desc">Free room nights at partner hotels in exchange for content.</div>
+          </div>
+          <div class="card anim-2" style="animation-delay: 0.4s;">
+            <div class="card-icon">📅</div>
+            <div class="card-title">Day Visits</div>
+            <div class="card-desc">Coordinated filming days at properties — you visit, you post, you earn.</div>
+          </div>
+          <div class="card anim-3" style="animation-delay: 0.5s;">
+            <div class="card-icon">🎯</div>
+            <div class="card-title">Brief Provided</div>
+            <div class="card-desc">Shot lists, key areas to film, deliverable guidance — we handle logistics.</div>
+          </div>
+        </div>
+        <div class="priority-callout anim-4" style="animation-delay: 0.6s;">
+          <span class="priority-icon">⭐</span>
+          <span class="priority-text">Creators actively filming get <strong>priority access</strong> to stays, visits, and personal room bookings.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 11: Discord Community -->
+    <div class="slide" data-slide="13">
+      <div class="slide-inner">
+        <p class="slide-tag anim-1">Your Home Base</p>
+        <h1 class="slide-title anim-2">Join the <span>Community</span></h1>
+        <p class="slide-subtitle anim-3">Our Discord is where everything happens — events, drops, support, and your creator managers on call.</p>
+        <div class="discord-board anim-4">
+          <div class="dc-group">
+            <div class="dc-cat">🎙️ Office Hours</div>
+            <div class="dc-channel"><span class="dc-name">🔊 Ben's &amp; Teton's Office</span></div>
+            <div class="dc-purpose" style="margin-top:5px; line-height:1.5;">Hop into voice for live 1:1 help from your creator managers.</div>
+          </div>
+          <div class="dc-group">
+            <div class="dc-cat">💬 Creator Center</div>
+            <div class="dc-channel"><span class="dc-hash">#</span><span class="dc-name">creator-events</span><span class="dc-purpose">— group film days</span></div>
+            <div class="dc-channel"><span class="dc-hash">#</span><span class="dc-name">share-your-content</span></div>
+            <div class="dc-channel"><span class="dc-hash">#</span><span class="dc-name">creator-showcase</span><span class="dc-purpose">— top posts</span></div>
+          </div>
+          <div class="dc-group">
+            <div class="dc-cat">✈️ TikTok GO Center</div>
+            <div class="dc-channel"><span class="dc-hash">#</span><span class="dc-name">announcements</span></div>
+            <div class="dc-channel"><span class="dc-hash">#</span><span class="dc-name">destinations</span></div>
+            <div class="dc-channel"><span class="dc-hash">#</span><span class="dc-name">get-mediakit</span><span class="dc-purpose">— pitch decks</span></div>
+          </div>
+          <div class="dc-group">
+            <div class="dc-cat">🏆 Incentives</div>
+            <div class="dc-channel"><span class="dc-hash">#</span><span class="dc-name">referral-program</span></div>
+            <div class="dc-channel"><span class="dc-hash">#</span><span class="dc-name">campaigns</span></div>
+            <div class="dc-channel"><span class="dc-hash">#</span><span class="dc-name">leaderboard</span><span class="dc-purpose">— live standings</span></div>
+          </div>
+        </div>
+        <div class="priority-callout anim-5">
+          <span class="priority-icon">💬</span>
+          <span class="priority-text">Join at <strong>discord.gg/5axUyeWVVU</strong> — say hi in <strong>#creator-chat</strong> and your manager will get you set up.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 12: Creator-Led Events -->
+    <div class="slide" data-slide="14">
+      <div class="slide-inner">
+        <p class="slide-tag anim-1">Better Together</p>
+        <h1 class="slide-title anim-2">Creator-Led <span>Events</span></h1>
+        <p class="slide-subtitle anim-3">We organize group filming days, hotel takeovers, and IRL meetups — all dropped in <strong style="color:var(--orange);">#creator-events</strong>. Show up, create together, earn together.</p>
+        <div class="cards-grid" style="max-width: 750px; margin: 32px auto 0; grid-template-columns: repeat(3, 1fr);">
+          <div class="card anim-1" style="animation-delay: 0.3s;">
+            <div class="card-icon">🏨</div>
+            <div class="card-title">Hotel Content Days</div>
+            <div class="card-desc">Coordinated group visits to partner properties. We handle access — you show up and film.</div>
+          </div>
+          <div class="card anim-2" style="animation-delay: 0.4s;">
+            <div class="card-icon">🎬</div>
+            <div class="card-title">Group Film Sessions</div>
+            <div class="card-desc">Link up with other creators to shoot, swap tips, and hit your weekly volume faster.</div>
+          </div>
+          <div class="card anim-3" style="animation-delay: 0.5s;">
+            <div class="card-icon">🌆</div>
+            <div class="card-title">City Meetups</div>
+            <div class="card-desc">IRL link-ups in active markets — NYC, DC and more as the network grows.</div>
+          </div>
+        </div>
+        <div class="priority-callout anim-5">
+          <span class="priority-icon">⭐</span>
+          <span class="priority-text">Spots fill fast — <strong>actively filming creators get first access</strong> to every event drop.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 13: Media Kit -->
+    <div class="slide" data-slide="15">
+      <div class="slide-inner">
+        <p class="slide-tag anim-1">Pitch Like a Pro</p>
+        <h1 class="slide-title anim-2">Your <span>Media Kit</span></h1>
+        <p class="slide-subtitle anim-3">A custom, brand-ready media kit built from your TikTok performance — perfect for pitching hotels &amp; resorts. Pick from three looks:</p>
+        <div class="mk-grid anim-4">
+          <!-- Bold -->
+          <div class="mk-card">
+            <div class="mk-preview" style="background:#121212;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div style="width:26px;height:26px;border-radius:50%;background:var(--orange);flex-shrink:0;"></div>
+                <div style="flex:1;">
+                  <div style="height:7px;width:70%;background:rgba(255,255,255,0.85);border-radius:3px;"></div>
+                  <div style="height:5px;width:45%;background:rgba(255,94,0,0.75);border-radius:3px;margin-top:4px;"></div>
+                </div>
+              </div>
+              <div style="display:flex;gap:6px;">
+                <div style="flex:1;background:rgba(255,94,0,0.15);border-radius:6px;height:30px;"></div>
+                <div style="flex:1;background:rgba(255,255,255,0.06);border-radius:6px;height:30px;"></div>
+                <div style="flex:1;background:rgba(255,255,255,0.06);border-radius:6px;height:30px;"></div>
+              </div>
+              <div style="height:5px;width:90%;background:rgba(255,255,255,0.12);border-radius:3px;"></div>
+              <div style="height:5px;width:72%;background:rgba(255,255,255,0.12);border-radius:3px;"></div>
+              <div style="margin-top:auto;display:flex;gap:5px;">
+                <div style="flex:1;height:24px;background:rgba(255,255,255,0.05);border-radius:5px;"></div>
+                <div style="flex:1;height:24px;background:rgba(255,255,255,0.05);border-radius:5px;"></div>
+              </div>
+            </div>
+            <div class="mk-label">Bold</div>
+            <div class="mk-desc">Dark, high-impact agency look.</div>
+          </div>
+          <!-- Editorial -->
+          <div class="mk-card">
+            <div class="mk-preview" style="background:#f3ede1;">
+              <div style="font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:15px;color:#1a1a1a;">Ava M.</div>
+              <div style="height:2px;width:34px;background:var(--orange);"></div>
+              <div style="height:4px;width:85%;background:rgba(0,0,0,0.22);border-radius:3px;"></div>
+              <div style="height:4px;width:68%;background:rgba(0,0,0,0.22);border-radius:3px;"></div>
+              <div style="display:flex;gap:10px;margin-top:6px;">
+                <div style="flex:1;"><div style="font-family:Georgia,serif;font-size:14px;font-weight:700;color:var(--orange);">1.2M</div><div style="height:3px;width:80%;background:rgba(0,0,0,0.2);border-radius:2px;margin-top:3px;"></div></div>
+                <div style="flex:1;"><div style="font-family:Georgia,serif;font-size:14px;font-weight:700;color:var(--orange);">48K</div><div style="height:3px;width:80%;background:rgba(0,0,0,0.2);border-radius:2px;margin-top:3px;"></div></div>
+              </div>
+              <div style="margin-top:auto;height:20px;width:100%;background:rgba(0,0,0,0.06);border-radius:5px;"></div>
+            </div>
+            <div class="mk-label">Editorial</div>
+            <div class="mk-desc">Warm, luxury magazine style.</div>
+          </div>
+          <!-- Sidebar -->
+          <div class="mk-card">
+            <div class="mk-preview" style="background:#f4f4f5;padding:0;flex-direction:row;gap:0;">
+              <div style="width:38%;background:#121212;padding:12px 9px;display:flex;flex-direction:column;gap:7px;">
+                <div style="width:22px;height:22px;border-radius:50%;background:var(--orange);"></div>
+                <div style="height:5px;width:85%;background:rgba(255,255,255,0.8);border-radius:3px;"></div>
+                <div style="height:4px;width:60%;background:rgba(255,94,0,0.75);border-radius:3px;"></div>
+                <div style="height:3px;width:90%;background:rgba(255,255,255,0.2);border-radius:2px;margin-top:4px;"></div>
+                <div style="height:3px;width:75%;background:rgba(255,255,255,0.2);border-radius:2px;"></div>
+              </div>
+              <div style="flex:1;padding:12px 10px;display:flex;flex-direction:column;gap:6px;">
+                <div style="height:5px;width:60%;background:rgba(0,0,0,0.35);border-radius:3px;"></div>
+                <div style="height:4px;width:92%;background:rgba(0,0,0,0.16);border-radius:2px;"></div>
+                <div style="height:4px;width:80%;background:rgba(0,0,0,0.16);border-radius:2px;"></div>
+                <div style="display:flex;gap:5px;margin-top:4px;">
+                  <div style="flex:1;height:22px;background:rgba(255,94,0,0.15);border-radius:5px;"></div>
+                  <div style="flex:1;height:22px;background:rgba(0,0,0,0.06);border-radius:5px;"></div>
+                </div>
+              </div>
+            </div>
+            <div class="mk-label">Sidebar</div>
+            <div class="mk-desc">Classic two-column profile.</div>
+          </div>
+        </div>
+        <div class="flow anim-5" style="margin-top:20px;">
+          <div class="flow-step"><div class="flow-icon">🎨</div><div class="flow-label">Pick style &amp; color</div></div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step"><div class="flow-icon">📊</div><div class="flow-label">Request in #get-mediakit</div></div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-step highlight"><div class="flow-icon">📬</div><div class="flow-label">Delivered in 24–48h</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 14: Monthly Incentives -->
+    <div class="slide" data-slide="16">
+      <div class="slide-inner">
+        <p class="slide-tag anim-1">Get Paid to Post</p>
+        <h1 class="slide-title anim-2">Monthly <span>Incentives</span></h1>
+        <p class="slide-subtitle anim-3">On top of your commission, we run cash incentives every month. Here's what's live for June.</p>
+        <div class="inc-grid anim-4">
+          <div class="inc-card">
+            <div class="inc-head">
+              <span class="inc-icon">🏆</span>
+              <div>
+                <div class="inc-name">Hotel Content Sprint</div>
+                <div class="inc-amt">Up to $500</div>
+              </div>
+            </div>
+            <div class="inc-desc">First creator to <strong style="color:#fff;">100 qualifying hotel posts</strong> in each two-week window wins <strong style="color:var(--orange);">$250</strong>. Two windows = up to $500.</div>
+          </div>
+          <div class="inc-card">
+            <div class="inc-head">
+              <span class="inc-icon">💰</span>
+              <div>
+                <div class="inc-name">GMV Cash Bonus</div>
+                <div class="inc-amt">$100 → $500</div>
+              </div>
+            </div>
+            <div class="inc-desc">Hit a GMV milestone in the month and the cash is yours — just stack your bookings.</div>
+            <div class="inc-tiers">
+              <div class="inc-tier"><div class="inc-tier-amt">$100</div><div class="inc-tier-goal">$10K GMV</div></div>
+              <div class="inc-tier"><div class="inc-tier-amt">$250</div><div class="inc-tier-goal">$25K GMV</div></div>
+              <div class="inc-tier"><div class="inc-tier-amt">$500</div><div class="inc-tier-goal">$50K GMV</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="anim-5" style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
+          <div style="background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-radius:20px;padding:5px 14px;font-size:11px;font-weight:600;color:#4ADE80;">✓ Qualifying: hotel content · 15s+ · 300+ views</div>
+          <div style="background:rgba(255,94,0,0.1);border:1px solid rgba(255,94,0,0.3);border-radius:20px;padding:5px 14px;font-size:11px;font-weight:600;color:var(--orange);">♻️ Referral: earn 5% of every creator you refer · first 3 months</div>
+          <div style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.3);border-radius:20px;padding:5px 14px;font-size:11px;font-weight:600;color:#a5b4fc;">🏆 Track standings in #leaderboard</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 15: Your First Week -->
+    <div class="slide" data-slide="17">
+      <div class="slide-inner">
+        <p class="slide-tag anim-1">Action Plan</p>
+        <h1 class="slide-title anim-2">Your <span>First Week</span></h1>
+        <p class="slide-subtitle anim-3">4 moves to hit the ground running.</p>
+        <div class="week-steps">
+          <div class="week-step anim-1" style="animation-delay: 0.2s;">
+            <div class="week-num">1</div>
+            <div class="week-content">
+              <div class="week-title">Film Hotels for Free</div>
+              <div class="week-desc">Start with lobbies, rooftop bars, and day passes — no room booking needed to create commission-eligible content.</div>
+            </div>
+          </div>
+          <div class="week-step anim-2" style="animation-delay: 0.35s;">
+            <div class="week-num">2</div>
+            <div class="week-content">
+              <div class="week-title">Sign Up for Incentives</div>
+              <div class="week-desc">Opt into this month's Hotel Content Sprint &amp; GMV Cash Bonus at wkf.ms/4n4KC4E so every qualifying post can earn you cash.</div>
+            </div>
+          </div>
+          <div class="week-step anim-3" style="animation-delay: 0.5s;">
+            <div class="week-num">3</div>
+            <div class="week-content">
+              <div class="week-title">Get Active in Discord</div>
+              <div class="week-desc">Join, say hi, and read through every channel — announcements, events, get-mediakit, and incentives. It's your home base.</div>
+            </div>
+          </div>
+          <div class="week-step anim-4" style="animation-delay: 0.65s;">
+            <div class="week-num">4</div>
+            <div class="week-content">
+              <div class="week-title">Read the Post-Meeting Guide</div>
+              <div class="week-desc">Check your texts for the guide we sent after your onboarding call — it walks you through everything start to finish.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 16: Let's Go -->
+    <div class="slide" data-slide="18">
+      <div class="slide-inner">
+        <p class="slide-tag anim-1">Ready?</p>
+        <h1 class="slide-title anim-2">Let's Get You <span>Earning</span></h1>
+        <p class="slide-subtitle anim-3" style="margin-bottom: 36px;">Your first commission is one video away. We'll support you every step.</p>
+        <div class="stat-row anim-4">
+          <div class="stat-item">
+            <div class="stat-value" style="font-size: 26px;">Dynamic</div>
+            <div class="stat-label">commission — locks at publish</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">20+ sec</div>
+            <div class="stat-label">min video length</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">GREEN</div>
+            <div class="stat-label">tag required</div>
+          </div>
+        </div>
+        <p class="slide-subtitle anim-5" style="margin-top: 40px; font-size: 18px; font-weight: 600; color: var(--orange);">Questions? Let's talk through them now.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <button class="nav-btn" id="prevBtn" disabled>←</button>
+    <div class="nav-dots" id="navDots"></div>
+    <button class="nav-btn" id="nextBtn">→</button>
+  </nav>
+
+  <script>
+    // Particles
+    const particlesContainer = document.getElementById('particles');
+    for (let i = 0; i < 25; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.left = Math.random() * 100 + '%';
+      p.style.animationDelay = Math.random() * 12 + 's';
+      p.style.animationDuration = (10 + Math.random() * 8) + 's';
+      particlesContainer.appendChild(p);
+    }
+
+    // Slideshow
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    const progress = document.getElementById('progress');
+    const currentSlideEl = document.getElementById('currentSlide');
+    const totalSlidesEl = document.getElementById('totalSlides');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const navDots = document.getElementById('navDots');
+
+    let currentSlide = 1;
+    totalSlidesEl.textContent = totalSlides;
+
+    for (let i = 1; i <= totalSlides; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'nav-dot' + (i === 1 ? ' active' : '');
+      dot.dataset.slide = i;
+      dot.addEventListener('click', () => goToSlide(i));
+      navDots.appendChild(dot);
+    }
+
+    function updateSlide() {
+      slides.forEach(slide => {
+        slide.classList.remove('active');
+        if (parseInt(slide.dataset.slide) === currentSlide) {
+          slide.classList.add('active');
+        }
+      });
+      progress.style.width = ((currentSlide / totalSlides) * 100) + '%';
+      currentSlideEl.textContent = currentSlide;
+      document.querySelectorAll('.nav-dot').forEach(dot => {
+        dot.classList.toggle('active', parseInt(dot.dataset.slide) === currentSlide);
+      });
+      prevBtn.disabled = currentSlide === 1;
+      nextBtn.disabled = currentSlide === totalSlides;
+    }
+
+    function goToSlide(n) { currentSlide = n; updateSlide(); }
+    window.go = function(n){ goToSlide(n+1); };  /* bridge for THUNDRR hub presenter (0-based) */
+    function nextSlide() { if (currentSlide < totalSlides) { currentSlide++; updateSlide(); } }
+    function prevSlide() { if (currentSlide > 1) { currentSlide--; updateSlide(); } }
+
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') nextSlide();
+      else if (e.key === 'ArrowLeft') prevSlide();
+    });
+
+    let touchStartX = 0;
+    document.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
+    document.addEventListener('touchend', e => {
+      const diff = touchStartX - e.changedTouches[0].screenX;
+      if (Math.abs(diff) > 50) diff > 0 ? nextSlide() : prevSlide();
+    });
+  </script>
+</body>
+</html>
