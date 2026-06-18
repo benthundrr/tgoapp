@@ -474,6 +474,9 @@ label.fld{display:block;font-size:11px;font-weight:800;letter-spacing:.1em;text-
 .deck-cover.l0{background:linear-gradient(135deg,#f97316,#ea580c)}
 .deck-cover.l1{background:linear-gradient(135deg,#2563eb,#0ea5e9)}
 .deck-cover.l2{background:linear-gradient(135deg,#b45309,#f59e0b)}
+.deck-cover.l3{background:linear-gradient(135deg,#15803d,#22c55e)}
+.deck-cover.l4{background:linear-gradient(135deg,#7c3aed,#a855f7)}
+.deck-cover.l5{background:linear-gradient(135deg,#0f172a,#334155)}
 .deckc .deck-body{padding:16px 18px}
 .deckc .deck-k{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--p)}
 .deckc .deck-t{font-size:17px;font-weight:900;letter-spacing:-.02em;margin:3px 0 6px}
@@ -1362,9 +1365,12 @@ $('#drawerScrim').addEventListener('click',closeDrawer);
 
 /* ---------------- WEBINARS ---------------- */
 const DECKS=[
+  {file:'webinars/creator-intro.html',k:'Intro · Welcome',cls:'l4',glyph:'✦',name:'Creator Introduction',desc:'The full Thundrr GO creator intro — what TikTok GO is, how commission works, what counts as a valid post, and how to start earning with the agency.'},
   {file:'webinars/L0.html',k:'L0 · Foundation',cls:'l0',glyph:'0',name:'Start at Zero',desc:'$0 → first sale + 10 valid posts. Account setup, navigating the marketplace, what counts as a valid post, and what to film first (lead with ACC).'},
   {file:'webinars/L1.html',k:'L1 · Momentum',cls:'l1',glyph:'1',name:'Refine Your Craft',desc:'$1K → $5K/mo. Sharper hooks, caption SEO, smart markets, posting cadence by vertical (ACC vs TTD), and reading your own data.'},
-  {file:'webinars/L2.html',k:'L2 · Scale',cls:'l2',glyph:'2',name:'Scale the System',desc:'$5K → $10K/mo. The volume engine, the length sweet spot, owning markets, and a weekly conversion review to make $10K months repeatable.'}
+  {file:'webinars/L2.html',k:'L2 · Scale',cls:'l2',glyph:'2',name:'Scale the System',desc:'$5K → $10K/mo. The volume engine, the length sweet spot, owning markets, and a weekly conversion review to make $10K months repeatable.'},
+  // ↓ add new decks here — duplicate webinars/TEMPLATE.html, rename, edit slides, then add a line like:
+  // {file:'webinars/L3.html',k:'L3 · Mastery',cls:'l3',glyph:'3',name:'Your Title',desc:'Short description.'},
 ];
 function renderWebinars(){
   $('#v-webinars').innerHTML=`
