@@ -632,11 +632,13 @@ const saveManaged=()=>localStorage.setItem(managedKey(),JSON.stringify([...MANAG
 const latestSnap=()=>DB.snapshots.at(-1)||{byUser:{}};
 const snapFor=u=>latestSnap().byUser[u]||null;
 function monthSnapGMV(u,mk){const s=DB.snapshots.find(s=>s.monthKey===mk);return s&&s.byUser[u]?s.byUser[u].sales:null;}
-function snapForScope(scope){if(scope&&scope!=='all'){const s=DB.snapshots.find(x=>x.monthKey===scope);if(s)return s;}return latestSnap();}
-function periodKPIs(scope){const s=snapForScope(scope),b=s.byUser;let gmv=0,orders=0,red=0,redO=0,views=0;
-  for(const u in b){const x=b[u];gmv+=x.sales||0;orders+=x.orders||0;red+=x.redemption||0;redO+=x.redeemedOrders||0;views+=x.views||0;}
-  return{gmv:Math.round(gmv*100)/100,orders,redemption:Math.round(red*100)/100,redeemed:redO,views,aov:orders?gmv/orders:0,
-    sellers:Object.values(b).filter(s=>s.sales>0).length,start:s.start,end:s.end,matched:s.monthKey===scope};}
+function periodKPIs(scope){
+  const snaps = scope==='all' ? DB.snapshots.slice() : DB.snapshots.filter(x=>x.monthKey===scope);
+  let gmv=0,orders=0,red=0,redO=0,views=0,start=null,end=null;const sellers=new Set();
+  snaps.forEach(s=>{for(const u in s.byUser){const x=s.byUser[u];gmv+=x.sales||0;orders+=x.orders||0;red+=x.redemption||0;redO+=x.redeemedOrders||0;views+=x.views||0;if((x.sales||0)>0)sellers.add(u);}
+    if(!start||s.start<start)start=s.start;const e=s.end||s.start;if(!end||e>end)end=e;});
+  return{gmv:Math.round(gmv*100)/100,orders,redemption:Math.round(red*100)/100,redeemed:redO,views,
+    aov:orders?gmv/orders:0,sellers:sellers.size,start,end,matched:snaps.length>0,nSnaps:snaps.length};}
 
 /* indexing */
 let IDX={byUser:{},months:[],curMonth:'',prevMonth:''};
@@ -673,53 +675,60 @@ function renderDash(){
   const list=Object.keys(latestSnap().byUser);
   if(!DASH_SCOPE)DASH_SCOPE=IDX.curMonth||'all';
   const scope=DASH_SCOPE,ps=prevScope(scope);
-  const K=periodKPIs(scope);                    // authoritative export totals (uses month's snapshot if uploaded)
-  const m=industryFor(scope),mp=ps?industryFor(ps):null;  // month post-based: valid + GMV by industry
-  const ag=aggFor(list,scope),pag=ps?aggFor(list,ps):{V:0,P:0};
+  let K=periodKPIs(scope);                       // authoritative: month=its snapshot, all=sum of snapshots
+  const m=industryFor(scope),mp=ps?industryFor(ps):null;
+  const ag=aggFor(list,scope),pag=ps?aggFor(list,ps):{V:0,P:0,active:0};
   const dscope=dailyFor(scope);
-  const mGmv=Math.round((m.acc.gmv+m.ttd.gmv)*100)/100,mGmvP=mp?mp.acc.gmv+mp.ttd.gmv:0;
+  const postTot=m.acc.gmv+m.ttd.gmv;
+  if(!K.matched){K={gmv:Math.round(postTot*100)/100,orders:0,redemption:0,redeemed:0,views:ag.V,aov:0,sellers:ag.active,start:scope+'01',end:scope+'31',matched:false,estimated:true};}
+  // split the ONE authoritative GMV into ACC/TTD by the post-level ratio (so the parts always add to the total)
+  const accShare=postTot?m.acc.gmv/postTot:0.5,accGmv=Math.round(K.gmv*accShare*100)/100,ttdGmv=Math.round((K.gmv-accGmv)*100)/100;
+  const Kp=ps?periodKPIs(ps):null;
   const del=(c,p)=>{if(p==null||!p)return{c:'flat',t:''};const d=(c-p)/p*100;return{c:d>0.5?'up':d<-0.5?'down':'flat',t:(d>0?'▲':d<0?'▼':'•')+Math.abs(d).toFixed(0)+'%'};};
-  const scopeLabel=scope==='all'?'All time':mLabel(scope),mShort=scope==='all'?'all':mLabel(scope).split(' ')[0];
+  const scopeLabel=scope==='all'?'All time':mLabel(scope),mShort=scope==='all'?'all-time':mLabel(scope).split(' ')[0];
   const expRange=`${ymd(K.start)}–${ymd(K.end)}`;
-  const expTitle=K.matched?`${mShort} export · ${expRange}`:`Latest export · ${expRange}`;
+  const expTitle=scope==='all'?`All-time · ${expRange}`:(K.matched?`${mShort} export · ${expRange}`:`${mShort} · estimated from posts`);
+  const expMeta=K.estimated?'no GO export uploaded for this month yet':(scope==='all'?`sum of ${K.nSnaps} monthly exports`:'authoritative · matches GO portal');
   const chips=[...IDX.months].reverse().map(x=>`<button class="chip ${scope===x?'on':''}" onclick="setScope('${x}')">${mLabel(x).split(' ')[0]}</button>`).join('')+`<button class="chip ${scope==='all'?'on':''}" onclick="setScope('all')">All time</button>`;
+
+  // GMV trend scaled so its endpoint equals the authoritative scope GMV
+  const dLast=dscope.length?dscope.at(-1):{ag:0,tg:0},dEnd=dLast.ag+dLast.tg,sc=dEnd?K.gmv/dEnd:1;
 
   $('#v-dash').innerHTML=`
    <div class="h-eyebrow">TikTok GO · Program</div>
    <h1 class="h-title">Program <em>dashboard</em></h1>
-   <div class="h-sub">${list.length} creators · ${K.sellers} selling</div>
+   <div class="h-sub">${list.length} creators · ${K.sellers} selling${scope==='all'?' across all months':''}</div>
 
-   <div class="card tight" style="margin-bottom:18px">
-     <div class="card-h"><h3><span class="dt"></span>${expTitle}</h3><span class="meta">${K.matched?'authoritative · matches portal':'matches GO portal'}</span></div>
+   <div class="chips" style="margin-top:16px">${chips}</div>
+
+   <div class="card tight" style="margin:4px 0 18px">
+     <div class="card-h"><h3><span class="dt"></span>${expTitle}</h3><span class="meta">${expMeta}</span></div>
      <div class="kstrip">
        <div class="k"><div class="kl">Paid GMV</div><div class="kv">${numSpan(K.gmv,'moneyC')}</div></div>
-       <div class="k"><div class="kl">Orders</div><div class="kv">${numSpan(K.orders,'int')}</div></div>
-       <div class="k"><div class="kl">AOV</div><div class="kv">${numSpan(K.aov,'moneyC')}</div></div>
-       <div class="k"><div class="kl">Redemption</div><div class="kv">${numSpan(K.redemption,'moneyC')}</div></div>
-       <div class="k"><div class="kl">Redeemed</div><div class="kv">${numSpan(K.redeemed,'int')}</div></div>
+       <div class="k"><div class="kl">Orders</div><div class="kv">${K.matched?numSpan(K.orders,'int'):'—'}</div></div>
+       <div class="k"><div class="kl">AOV</div><div class="kv">${K.matched?numSpan(K.aov,'moneyC'):'—'}</div></div>
+       <div class="k"><div class="kl">Redemption</div><div class="kv">${K.matched?numSpan(K.redemption,'moneyC'):'—'}</div></div>
+       <div class="k"><div class="kl">Redeemed</div><div class="kv">${K.matched?numSpan(K.redeemed,'int'):'—'}</div></div>
      </div>
    </div>
-
-   <div class="card-h" style="margin-bottom:10px"><h3 style="font-size:13px"><span class="dt"></span>Monthly performance</h3></div>
-   <div class="chips">${chips}</div>
 
    <div class="mini-stats">
      ${mini('Posts',ag.P,'fmt',del(ag.P,pag.P),mShort)}
      ${mini('Valid posts',m.totalValid,'int',mp?del(m.totalValid,mp.totalValid):{c:'flat',t:''},`${m.acc.valid} ACC · ${m.ttd.valid} TTD`)}
      ${mini('Views',ag.V,'fmt',del(ag.V,pag.V),mShort)}
-     ${mini('GMV from posts',mGmv,'money',mp?del(mGmv,mGmvP):{c:'flat',t:''},'published '+mShort)}
+     ${mini('Active creators',ag.active,'int',del(ag.active,pag.active),'posted '+mShort)}
    </div>
 
    <div class="prog">
-     ${progCard('acc','🏨','ACC · Accommodations',m.acc.valid,m.acc.gmv,mp?del(m.acc.valid,mp.acc.valid):{c:'flat',t:''},mShort)}
-     ${progCard('ttd','🎟️','TTD · Things to Do',m.ttd.valid,m.ttd.gmv,mp?del(m.ttd.valid,mp.ttd.valid):{c:'flat',t:''},mShort)}
+     ${progCard('acc','🏨','ACC · Accommodations',m.acc.valid,accGmv,mp?del(m.acc.valid,mp.acc.valid):{c:'flat',t:''},mShort)}
+     ${progCard('ttd','🎟️','TTD · Things to Do',m.ttd.valid,ttdGmv,mp?del(m.ttd.valid,mp.ttd.valid):{c:'flat',t:''},mShort)}
    </div>
-   <div class="map-hint" style="margin:-6px 2px 16px">Top strip = your latest export's period totals (the GO portal figures). The monthly section breaks down posts, valid posts (300+ views) &amp; post-attributed GMV by the month each video was published — upload a month's CreatorAnalysis export to get that month's authoritative GMV.</div>
+   <div class="map-hint" style="margin:-6px 2px 16px">GMV/orders/AOV come straight from your GO export for the selected month (All-time sums every month). ACC vs TTD splits that total by each category's share of post sales. Valid = public posts with 300+ views.</div>
 
    <div class="dash-layout">
      <div>
        <div class="card">
-         <div class="card-h"><h3><span class="dt"></span>GMV from posts · ${scopeLabel}</h3><span class="meta">cumulative → ${money(mGmv)}</span></div>
+         <div class="card-h"><h3><span class="dt"></span>Paid GMV · ${scopeLabel}</h3><span class="meta">cumulative → ${money(K.gmv)}</span></div>
          <div id="gmvChart"></div>
          <div class="legend"><span><i style="background:var(--p)"></i>ACC</span><span><i style="background:var(--blue)"></i>TTD</span></div>
        </div>
@@ -735,7 +744,7 @@ function renderDash(){
      </div>
      <div>
        <div class="card">
-         <div class="card-h"><h3><span class="dt"></span>GMV leaderboard</h3><span class="meta">all-time</span></div>
+         <div class="card-h"><h3><span class="dt"></span>GMV leaderboard</h3><span class="meta">latest export</span></div>
          <div class="lb" id="leaderboard"></div>
        </div>
        <div class="card" id="attentionCard">
@@ -745,7 +754,7 @@ function renderDash(){
      </div>
    </div>`;
 
-  $('#gmvChart').innerHTML=dscope.length?multiChart(dscope.map(p=>ymd(p.d)),[{color:'var(--p)',vals:dscope.map(p=>p.ag)},{color:'var(--blue)',vals:dscope.map(p=>p.tg)}],money):'<div class="muted-note">No data in range.</div>';
+  $('#gmvChart').innerHTML=dscope.length?multiChart(dscope.map(p=>ymd(p.d)),[{color:'var(--p)',vals:dscope.map(p=>Math.round(p.ag*sc*100)/100)},{color:'var(--blue)',vals:dscope.map(p=>Math.round(p.tg*sc*100)/100)}],money):'<div class="muted-note">No data in range.</div>';
   $('#validChart').innerHTML=dscope.length?multiChart(dscope.map(p=>ymd(p.d)),[{color:'var(--p)',vals:dscope.map(p=>p.av)},{color:'var(--blue)',vals:dscope.map(p=>p.tv)}],fmt):'<div class="muted-note">No posts in range.</div>';
   renderViewTrend(list);
   renderLeaderboard(list);renderAttention(list);
@@ -755,7 +764,7 @@ function mini(l,raw,type,d,note){return `<div class="mini"><div class="l">${l}</
 function progCard(cls,ico,title,valid,gmv,dv,mShort){
   return `<div class="progc ${cls==='ttd'?'ttd':''}">
     <div class="pt"><span class="ico">${ico}</span>${title}</div>
-    <div class="gmv">${numSpan(gmv,'money')}</div><div class="gl">GMV · posts published ${mShort}</div>
+    <div class="gmv">${numSpan(gmv,'money')}</div><div class="gl">GMV · ${mShort}</div>
     <div class="vp"><span class="n">${numSpan(valid,'int')}</span><span class="vl">valid · ${mShort} ${dv&&dv.t?`· <span class="${dv.c}">${dv.t}</span>`:''}</span></div>
   </div>`;}
 
